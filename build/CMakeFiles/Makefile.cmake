@@ -21,6 +21,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "../lib/googletest/googletest/cmake/gtest_main.pc.in"
   "../lib/googletest/googletest/cmake/internal_utils.cmake"
   "../list/CMakeLists.txt"
+  "../matrix/CMakeLists.txt"
   "../tests/CMakeLists.txt"
   "/usr/share/cmake-3.22/Modules/BasicConfigVersion-AnyNewerVersion.cmake.in"
   "/usr/share/cmake-3.22/Modules/CMakeCInformation.cmake"
@@ -65,6 +66,7 @@ set(CMAKE_MAKEFILE_OUTPUTS
 set(CMAKE_MAKEFILE_PRODUCTS
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   "list/CMakeFiles/CMakeDirectoryInformation.cmake"
+  "matrix/CMakeFiles/CMakeDirectoryInformation.cmake"
   "tests/CMakeFiles/CMakeDirectoryInformation.cmake"
   "lib/googletest/CMakeFiles/CMakeDirectoryInformation.cmake"
   "lib/googletest/googletest/generated/gmock.pc"
@@ -81,7 +83,9 @@ set(CMAKE_MAKEFILE_PRODUCTS
 set(CMAKE_DEPEND_INFO_FILES
   "list/CMakeFiles/list-project_run.dir/DependInfo.cmake"
   "list/CMakeFiles/list-project_lib.dir/DependInfo.cmake"
-  "tests/CMakeFiles/list-project_tst.dir/DependInfo.cmake"
+  "matrix/CMakeFiles/matrix-project_run.dir/DependInfo.cmake"
+  "matrix/CMakeFiles/matrix-project_lib.dir/DependInfo.cmake"
+  "tests/CMakeFiles/dslib-project_tst.dir/DependInfo.cmake"
   "lib/googletest/googlemock/CMakeFiles/gmock.dir/DependInfo.cmake"
   "lib/googletest/googlemock/CMakeFiles/gmock_main.dir/DependInfo.cmake"
   "lib/googletest/googletest/CMakeFiles/gtest.dir/DependInfo.cmake"

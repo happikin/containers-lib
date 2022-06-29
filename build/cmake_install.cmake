@@ -45,6 +45,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/happikin/dev/practice/cpp/dslib/build/list/cmake_install.cmake")
+  include("/home/happikin/dev/practice/cpp/dslib/build/matrix/cmake_install.cmake")
   include("/home/happikin/dev/practice/cpp/dslib/build/tests/cmake_install.cmake")
   include("/home/happikin/dev/practice/cpp/dslib/build/lib/googletest/cmake_install.cmake")
 

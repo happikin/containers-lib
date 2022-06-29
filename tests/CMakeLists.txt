@@ -6,6 +6,6 @@ set(SOURCES ${TEST_SOURCES})
 
 add_executable(${BINARY} ${TEST_SOURCES})
 
-target_link_libraries(${BINARY} PUBLIC ${CMAKE_PROJECT_NAME}_lib gtest)
+target_link_libraries(${BINARY} PUBLIC list-project_lib matrix-project_lib gtest)
 
 add_test(NAME ${BINARY} COMMAND ${BINARY})

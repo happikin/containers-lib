@@ -12,7 +12,15 @@
 /home/happikin/dev/practice/cpp/dslib/build/list/CMakeFiles/install.dir
 /home/happikin/dev/practice/cpp/dslib/build/list/CMakeFiles/install/local.dir
 /home/happikin/dev/practice/cpp/dslib/build/list/CMakeFiles/install/strip.dir
-/home/happikin/dev/practice/cpp/dslib/build/tests/CMakeFiles/list-project_tst.dir
+/home/happikin/dev/practice/cpp/dslib/build/matrix/CMakeFiles/matrix-project_run.dir
+/home/happikin/dev/practice/cpp/dslib/build/matrix/CMakeFiles/matrix-project_lib.dir
+/home/happikin/dev/practice/cpp/dslib/build/matrix/CMakeFiles/edit_cache.dir
+/home/happikin/dev/practice/cpp/dslib/build/matrix/CMakeFiles/rebuild_cache.dir
+/home/happikin/dev/practice/cpp/dslib/build/matrix/CMakeFiles/list_install_components.dir
+/home/happikin/dev/practice/cpp/dslib/build/matrix/CMakeFiles/install.dir
+/home/happikin/dev/practice/cpp/dslib/build/matrix/CMakeFiles/install/local.dir
+/home/happikin/dev/practice/cpp/dslib/build/matrix/CMakeFiles/install/strip.dir
+/home/happikin/dev/practice/cpp/dslib/build/tests/CMakeFiles/dslib-project_tst.dir
 /home/happikin/dev/practice/cpp/dslib/build/tests/CMakeFiles/edit_cache.dir
 /home/happikin/dev/practice/cpp/dslib/build/tests/CMakeFiles/rebuild_cache.dir
 /home/happikin/dev/practice/cpp/dslib/build/tests/CMakeFiles/list_install_components.dir

@@ -162,25 +162,25 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-tests/CMakeFiles/list-project_tst.dir/rule:
-	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/list-project_tst.dir/rule
-.PHONY : tests/CMakeFiles/list-project_tst.dir/rule
+tests/CMakeFiles/dslib-project_tst.dir/rule:
+	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/dslib-project_tst.dir/rule
+.PHONY : tests/CMakeFiles/dslib-project_tst.dir/rule
 
 # Convenience name for target.
-list-project_tst: tests/CMakeFiles/list-project_tst.dir/rule
-.PHONY : list-project_tst
+dslib-project_tst: tests/CMakeFiles/dslib-project_tst.dir/rule
+.PHONY : dslib-project_tst
 
 # fast build rule for target.
-list-project_tst/fast:
-	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/list-project_tst.dir/build.make tests/CMakeFiles/list-project_tst.dir/build
-.PHONY : list-project_tst/fast
+dslib-project_tst/fast:
+	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/dslib-project_tst.dir/build.make tests/CMakeFiles/dslib-project_tst.dir/build
+.PHONY : dslib-project_tst/fast
 
 list-test.o: list-test.cpp.o
 .PHONY : list-test.o
 
 # target to build an object file
 list-test.cpp.o:
-	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/list-project_tst.dir/build.make tests/CMakeFiles/list-project_tst.dir/list-test.cpp.o
+	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/dslib-project_tst.dir/build.make tests/CMakeFiles/dslib-project_tst.dir/list-test.cpp.o
 .PHONY : list-test.cpp.o
 
 list-test.i: list-test.cpp.i
@@ -188,7 +188,7 @@ list-test.i: list-test.cpp.i
 
 # target to preprocess a source file
 list-test.cpp.i:
-	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/list-project_tst.dir/build.make tests/CMakeFiles/list-project_tst.dir/list-test.cpp.i
+	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/dslib-project_tst.dir/build.make tests/CMakeFiles/dslib-project_tst.dir/list-test.cpp.i
 .PHONY : list-test.cpp.i
 
 list-test.s: list-test.cpp.s
@@ -196,7 +196,7 @@ list-test.s: list-test.cpp.s
 
 # target to generate assembly for a file
 list-test.cpp.s:
-	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/list-project_tst.dir/build.make tests/CMakeFiles/list-project_tst.dir/list-test.cpp.s
+	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/dslib-project_tst.dir/build.make tests/CMakeFiles/dslib-project_tst.dir/list-test.cpp.s
 .PHONY : list-test.cpp.s
 
 main.o: main.cpp.o
@@ -204,7 +204,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/list-project_tst.dir/build.make tests/CMakeFiles/list-project_tst.dir/main.cpp.o
+	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/dslib-project_tst.dir/build.make tests/CMakeFiles/dslib-project_tst.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -212,7 +212,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/list-project_tst.dir/build.make tests/CMakeFiles/list-project_tst.dir/main.cpp.i
+	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/dslib-project_tst.dir/build.make tests/CMakeFiles/dslib-project_tst.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -220,8 +220,32 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/list-project_tst.dir/build.make tests/CMakeFiles/list-project_tst.dir/main.cpp.s
+	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/dslib-project_tst.dir/build.make tests/CMakeFiles/dslib-project_tst.dir/main.cpp.s
 .PHONY : main.cpp.s
+
+matrix-tests.o: matrix-tests.cpp.o
+.PHONY : matrix-tests.o
+
+# target to build an object file
+matrix-tests.cpp.o:
+	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/dslib-project_tst.dir/build.make tests/CMakeFiles/dslib-project_tst.dir/matrix-tests.cpp.o
+.PHONY : matrix-tests.cpp.o
+
+matrix-tests.i: matrix-tests.cpp.i
+.PHONY : matrix-tests.i
+
+# target to preprocess a source file
+matrix-tests.cpp.i:
+	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/dslib-project_tst.dir/build.make tests/CMakeFiles/dslib-project_tst.dir/matrix-tests.cpp.i
+.PHONY : matrix-tests.cpp.i
+
+matrix-tests.s: matrix-tests.cpp.s
+.PHONY : matrix-tests.s
+
+# target to generate assembly for a file
+matrix-tests.cpp.s:
+	cd /home/happikin/dev/practice/cpp/dslib/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/dslib-project_tst.dir/build.make tests/CMakeFiles/dslib-project_tst.dir/matrix-tests.cpp.s
+.PHONY : matrix-tests.cpp.s
 
 # Help Target
 help:
@@ -235,13 +259,16 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
-	@echo "... list-project_tst"
+	@echo "... dslib-project_tst"
 	@echo "... list-test.o"
 	@echo "... list-test.i"
 	@echo "... list-test.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... matrix-tests.o"
+	@echo "... matrix-tests.i"
+	@echo "... matrix-tests.s"
 .PHONY : help
 
 

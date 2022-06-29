@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/dslib-project_tst.dir/list-test.cpp.o CMakeFiles/dslib-project_tst.dir/main.cpp.o CMakeFiles/dslib-project_tst.dir/matrix-tests.cpp.o -o dslib-project_tst  ../list/liblist-project_lib.a ../matrix/libmatrix-project_lib.a ../lib/libgtest.a 

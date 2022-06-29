@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/happikin/dev/practice/cpp/dslib/list
+CXX_INCLUDES = -I/home/happikin/dev/practice/cpp/dslib/list -I/home/happikin/dev/practice/cpp/dslib/matrix
 
 CXX_FLAGS = -std=gnu++11
 

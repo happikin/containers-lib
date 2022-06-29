@@ -188,17 +188,43 @@ list-project_lib/fast:
 .PHONY : list-project_lib/fast
 
 #=============================================================================
-# Target rules for targets named list-project_tst
+# Target rules for targets named matrix-project_run
 
 # Build rule for target.
-list-project_tst: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 list-project_tst
-.PHONY : list-project_tst
+matrix-project_run: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 matrix-project_run
+.PHONY : matrix-project_run
 
 # fast build rule for target.
-list-project_tst/fast:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/list-project_tst.dir/build.make tests/CMakeFiles/list-project_tst.dir/build
-.PHONY : list-project_tst/fast
+matrix-project_run/fast:
+	$(MAKE) $(MAKESILENT) -f matrix/CMakeFiles/matrix-project_run.dir/build.make matrix/CMakeFiles/matrix-project_run.dir/build
+.PHONY : matrix-project_run/fast
+
+#=============================================================================
+# Target rules for targets named matrix-project_lib
+
+# Build rule for target.
+matrix-project_lib: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 matrix-project_lib
+.PHONY : matrix-project_lib
+
+# fast build rule for target.
+matrix-project_lib/fast:
+	$(MAKE) $(MAKESILENT) -f matrix/CMakeFiles/matrix-project_lib.dir/build.make matrix/CMakeFiles/matrix-project_lib.dir/build
+.PHONY : matrix-project_lib/fast
+
+#=============================================================================
+# Target rules for targets named dslib-project_tst
+
+# Build rule for target.
+dslib-project_tst: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 dslib-project_tst
+.PHONY : dslib-project_tst
+
+# fast build rule for target.
+dslib-project_tst/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/dslib-project_tst.dir/build.make tests/CMakeFiles/dslib-project_tst.dir/build
+.PHONY : dslib-project_tst/fast
 
 #=============================================================================
 # Target rules for targets named gmock
@@ -264,13 +290,15 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... dslib-project_tst"
 	@echo "... gmock"
 	@echo "... gmock_main"
 	@echo "... gtest"
 	@echo "... gtest_main"
 	@echo "... list-project_lib"
 	@echo "... list-project_run"
-	@echo "... list-project_tst"
+	@echo "... matrix-project_lib"
+	@echo "... matrix-project_run"
 .PHONY : help
 
 

@@ -4,8 +4,9 @@
             "name": "Linux",
             "includePath": [
                 "${default}",
+                "${workspaceFolder}/lib/**",
                 "${workspaceFolder}/list",
-                "${workspaceFolder}/lib/**"
+                "${workspaceFolder}/matrix"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

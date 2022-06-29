@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/list-project_tst.dir/list-test.cpp.o CMakeFiles/list-project_tst.dir/main.cpp.o -o list-project_tst  ../list/liblist-project_lib.a ../lib/libgtest.a 

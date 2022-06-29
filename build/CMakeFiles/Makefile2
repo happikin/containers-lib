@@ -64,18 +64,21 @@ CMAKE_BINARY_DIR = /home/happikin/dev/practice/cpp/dslib/build
 
 # The main recursive "all" target.
 all: list/all
+all: matrix/all
 all: tests/all
 all: lib/googletest/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
 preinstall: list/preinstall
+preinstall: matrix/preinstall
 preinstall: tests/preinstall
 preinstall: lib/googletest/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
 clean: list/clean
+clean: matrix/clean
 clean: tests/clean
 clean: lib/googletest/clean
 .PHONY : clean
@@ -149,10 +152,27 @@ list/clean: list/CMakeFiles/list-project_lib.dir/clean
 .PHONY : list/clean
 
 #=============================================================================
+# Directory level rules for directory matrix
+
+# Recursive "all" directory target.
+matrix/all: matrix/CMakeFiles/matrix-project_run.dir/all
+matrix/all: matrix/CMakeFiles/matrix-project_lib.dir/all
+.PHONY : matrix/all
+
+# Recursive "preinstall" directory target.
+matrix/preinstall:
+.PHONY : matrix/preinstall
+
+# Recursive "clean" directory target.
+matrix/clean: matrix/CMakeFiles/matrix-project_run.dir/clean
+matrix/clean: matrix/CMakeFiles/matrix-project_lib.dir/clean
+.PHONY : matrix/clean
+
+#=============================================================================
 # Directory level rules for directory tests
 
 # Recursive "all" directory target.
-tests/all: tests/CMakeFiles/list-project_tst.dir/all
+tests/all: tests/CMakeFiles/dslib-project_tst.dir/all
 .PHONY : tests/all
 
 # Recursive "preinstall" directory target.
@@ -160,7 +180,7 @@ tests/preinstall:
 .PHONY : tests/preinstall
 
 # Recursive "clean" directory target.
-tests/clean: tests/CMakeFiles/list-project_tst.dir/clean
+tests/clean: tests/CMakeFiles/dslib-project_tst.dir/clean
 .PHONY : tests/clean
 
 #=============================================================================
@@ -170,7 +190,7 @@ tests/clean: tests/CMakeFiles/list-project_tst.dir/clean
 list/CMakeFiles/list-project_run.dir/all:
 	$(MAKE) $(MAKESILENT) -f list/CMakeFiles/list-project_run.dir/build.make list/CMakeFiles/list-project_run.dir/depend
 	$(MAKE) $(MAKESILENT) -f list/CMakeFiles/list-project_run.dir/build.make list/CMakeFiles/list-project_run.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/happikin/dev/practice/cpp/dslib/build/CMakeFiles --progress-num=11,12 "Built target list-project_run"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/happikin/dev/practice/cpp/dslib/build/CMakeFiles --progress-num=15,16 "Built target list-project_run"
 .PHONY : list/CMakeFiles/list-project_run.dir/all
 
 # Build rule for subdir invocation for target.
@@ -196,7 +216,7 @@ list/CMakeFiles/list-project_run.dir/clean:
 list/CMakeFiles/list-project_lib.dir/all:
 	$(MAKE) $(MAKESILENT) -f list/CMakeFiles/list-project_lib.dir/build.make list/CMakeFiles/list-project_lib.dir/depend
 	$(MAKE) $(MAKESILENT) -f list/CMakeFiles/list-project_lib.dir/build.make list/CMakeFiles/list-project_lib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/happikin/dev/practice/cpp/dslib/build/CMakeFiles --progress-num=9,10 "Built target list-project_lib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/happikin/dev/practice/cpp/dslib/build/CMakeFiles --progress-num=13,14 "Built target list-project_lib"
 .PHONY : list/CMakeFiles/list-project_lib.dir/all
 
 # Build rule for subdir invocation for target.
@@ -216,31 +236,84 @@ list/CMakeFiles/list-project_lib.dir/clean:
 .PHONY : list/CMakeFiles/list-project_lib.dir/clean
 
 #=============================================================================
-# Target rules for target tests/CMakeFiles/list-project_tst.dir
+# Target rules for target matrix/CMakeFiles/matrix-project_run.dir
 
 # All Build rule for target.
-tests/CMakeFiles/list-project_tst.dir/all: lib/googletest/googletest/CMakeFiles/gtest.dir/all
-tests/CMakeFiles/list-project_tst.dir/all: list/CMakeFiles/list-project_lib.dir/all
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/list-project_tst.dir/build.make tests/CMakeFiles/list-project_tst.dir/depend
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/list-project_tst.dir/build.make tests/CMakeFiles/list-project_tst.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/happikin/dev/practice/cpp/dslib/build/CMakeFiles --progress-num=13,14,15 "Built target list-project_tst"
-.PHONY : tests/CMakeFiles/list-project_tst.dir/all
+matrix/CMakeFiles/matrix-project_run.dir/all:
+	$(MAKE) $(MAKESILENT) -f matrix/CMakeFiles/matrix-project_run.dir/build.make matrix/CMakeFiles/matrix-project_run.dir/depend
+	$(MAKE) $(MAKESILENT) -f matrix/CMakeFiles/matrix-project_run.dir/build.make matrix/CMakeFiles/matrix-project_run.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/happikin/dev/practice/cpp/dslib/build/CMakeFiles --progress-num=19,20 "Built target matrix-project_run"
+.PHONY : matrix/CMakeFiles/matrix-project_run.dir/all
 
 # Build rule for subdir invocation for target.
-tests/CMakeFiles/list-project_tst.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/happikin/dev/practice/cpp/dslib/build/CMakeFiles 7
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/list-project_tst.dir/all
+matrix/CMakeFiles/matrix-project_run.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/happikin/dev/practice/cpp/dslib/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 matrix/CMakeFiles/matrix-project_run.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/happikin/dev/practice/cpp/dslib/build/CMakeFiles 0
-.PHONY : tests/CMakeFiles/list-project_tst.dir/rule
+.PHONY : matrix/CMakeFiles/matrix-project_run.dir/rule
 
 # Convenience name for target.
-list-project_tst: tests/CMakeFiles/list-project_tst.dir/rule
-.PHONY : list-project_tst
+matrix-project_run: matrix/CMakeFiles/matrix-project_run.dir/rule
+.PHONY : matrix-project_run
 
 # clean rule for target.
-tests/CMakeFiles/list-project_tst.dir/clean:
-	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/list-project_tst.dir/build.make tests/CMakeFiles/list-project_tst.dir/clean
-.PHONY : tests/CMakeFiles/list-project_tst.dir/clean
+matrix/CMakeFiles/matrix-project_run.dir/clean:
+	$(MAKE) $(MAKESILENT) -f matrix/CMakeFiles/matrix-project_run.dir/build.make matrix/CMakeFiles/matrix-project_run.dir/clean
+.PHONY : matrix/CMakeFiles/matrix-project_run.dir/clean
+
+#=============================================================================
+# Target rules for target matrix/CMakeFiles/matrix-project_lib.dir
+
+# All Build rule for target.
+matrix/CMakeFiles/matrix-project_lib.dir/all:
+	$(MAKE) $(MAKESILENT) -f matrix/CMakeFiles/matrix-project_lib.dir/build.make matrix/CMakeFiles/matrix-project_lib.dir/depend
+	$(MAKE) $(MAKESILENT) -f matrix/CMakeFiles/matrix-project_lib.dir/build.make matrix/CMakeFiles/matrix-project_lib.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/happikin/dev/practice/cpp/dslib/build/CMakeFiles --progress-num=17,18 "Built target matrix-project_lib"
+.PHONY : matrix/CMakeFiles/matrix-project_lib.dir/all
+
+# Build rule for subdir invocation for target.
+matrix/CMakeFiles/matrix-project_lib.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/happikin/dev/practice/cpp/dslib/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 matrix/CMakeFiles/matrix-project_lib.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/happikin/dev/practice/cpp/dslib/build/CMakeFiles 0
+.PHONY : matrix/CMakeFiles/matrix-project_lib.dir/rule
+
+# Convenience name for target.
+matrix-project_lib: matrix/CMakeFiles/matrix-project_lib.dir/rule
+.PHONY : matrix-project_lib
+
+# clean rule for target.
+matrix/CMakeFiles/matrix-project_lib.dir/clean:
+	$(MAKE) $(MAKESILENT) -f matrix/CMakeFiles/matrix-project_lib.dir/build.make matrix/CMakeFiles/matrix-project_lib.dir/clean
+.PHONY : matrix/CMakeFiles/matrix-project_lib.dir/clean
+
+#=============================================================================
+# Target rules for target tests/CMakeFiles/dslib-project_tst.dir
+
+# All Build rule for target.
+tests/CMakeFiles/dslib-project_tst.dir/all: list/CMakeFiles/list-project_lib.dir/all
+tests/CMakeFiles/dslib-project_tst.dir/all: matrix/CMakeFiles/matrix-project_lib.dir/all
+tests/CMakeFiles/dslib-project_tst.dir/all: lib/googletest/googletest/CMakeFiles/gtest.dir/all
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/dslib-project_tst.dir/build.make tests/CMakeFiles/dslib-project_tst.dir/depend
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/dslib-project_tst.dir/build.make tests/CMakeFiles/dslib-project_tst.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/happikin/dev/practice/cpp/dslib/build/CMakeFiles --progress-num=1,2,3,4 "Built target dslib-project_tst"
+.PHONY : tests/CMakeFiles/dslib-project_tst.dir/all
+
+# Build rule for subdir invocation for target.
+tests/CMakeFiles/dslib-project_tst.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/happikin/dev/practice/cpp/dslib/build/CMakeFiles 10
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tests/CMakeFiles/dslib-project_tst.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/happikin/dev/practice/cpp/dslib/build/CMakeFiles 0
+.PHONY : tests/CMakeFiles/dslib-project_tst.dir/rule
+
+# Convenience name for target.
+dslib-project_tst: tests/CMakeFiles/dslib-project_tst.dir/rule
+.PHONY : dslib-project_tst
+
+# clean rule for target.
+tests/CMakeFiles/dslib-project_tst.dir/clean:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/dslib-project_tst.dir/build.make tests/CMakeFiles/dslib-project_tst.dir/clean
+.PHONY : tests/CMakeFiles/dslib-project_tst.dir/clean
 
 #=============================================================================
 # Target rules for target lib/googletest/googlemock/CMakeFiles/gmock.dir
@@ -249,7 +322,7 @@ tests/CMakeFiles/list-project_tst.dir/clean:
 lib/googletest/googlemock/CMakeFiles/gmock.dir/all: lib/googletest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f lib/googletest/googlemock/CMakeFiles/gmock.dir/build.make lib/googletest/googlemock/CMakeFiles/gmock.dir/depend
 	$(MAKE) $(MAKESILENT) -f lib/googletest/googlemock/CMakeFiles/gmock.dir/build.make lib/googletest/googlemock/CMakeFiles/gmock.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/happikin/dev/practice/cpp/dslib/build/CMakeFiles --progress-num=1,2 "Built target gmock"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/happikin/dev/practice/cpp/dslib/build/CMakeFiles --progress-num=5,6 "Built target gmock"
 .PHONY : lib/googletest/googlemock/CMakeFiles/gmock.dir/all
 
 # Build rule for subdir invocation for target.
@@ -276,7 +349,7 @@ lib/googletest/googlemock/CMakeFiles/gmock_main.dir/all: lib/googletest/googlemo
 lib/googletest/googlemock/CMakeFiles/gmock_main.dir/all: lib/googletest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f lib/googletest/googlemock/CMakeFiles/gmock_main.dir/build.make lib/googletest/googlemock/CMakeFiles/gmock_main.dir/depend
 	$(MAKE) $(MAKESILENT) -f lib/googletest/googlemock/CMakeFiles/gmock_main.dir/build.make lib/googletest/googlemock/CMakeFiles/gmock_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/happikin/dev/practice/cpp/dslib/build/CMakeFiles --progress-num=3,4 "Built target gmock_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/happikin/dev/practice/cpp/dslib/build/CMakeFiles --progress-num=7,8 "Built target gmock_main"
 .PHONY : lib/googletest/googlemock/CMakeFiles/gmock_main.dir/all
 
 # Build rule for subdir invocation for target.
@@ -302,7 +375,7 @@ lib/googletest/googlemock/CMakeFiles/gmock_main.dir/clean:
 lib/googletest/googletest/CMakeFiles/gtest.dir/all:
 	$(MAKE) $(MAKESILENT) -f lib/googletest/googletest/CMakeFiles/gtest.dir/build.make lib/googletest/googletest/CMakeFiles/gtest.dir/depend
 	$(MAKE) $(MAKESILENT) -f lib/googletest/googletest/CMakeFiles/gtest.dir/build.make lib/googletest/googletest/CMakeFiles/gtest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/happikin/dev/practice/cpp/dslib/build/CMakeFiles --progress-num=5,6 "Built target gtest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/happikin/dev/practice/cpp/dslib/build/CMakeFiles --progress-num=9,10 "Built target gtest"
 .PHONY : lib/googletest/googletest/CMakeFiles/gtest.dir/all
 
 # Build rule for subdir invocation for target.
@@ -328,7 +401,7 @@ lib/googletest/googletest/CMakeFiles/gtest.dir/clean:
 lib/googletest/googletest/CMakeFiles/gtest_main.dir/all: lib/googletest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) $(MAKESILENT) -f lib/googletest/googletest/CMakeFiles/gtest_main.dir/build.make lib/googletest/googletest/CMakeFiles/gtest_main.dir/depend
 	$(MAKE) $(MAKESILENT) -f lib/googletest/googletest/CMakeFiles/gtest_main.dir/build.make lib/googletest/googletest/CMakeFiles/gtest_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/happikin/dev/practice/cpp/dslib/build/CMakeFiles --progress-num=7,8 "Built target gtest_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/happikin/dev/practice/cpp/dslib/build/CMakeFiles --progress-num=11,12 "Built target gtest_main"
 .PHONY : lib/googletest/googletest/CMakeFiles/gtest_main.dir/all
 
 # Build rule for subdir invocation for target.
