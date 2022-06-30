@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/matrix-project_run.dir/main.cpp.o -o matrix-project_run 
