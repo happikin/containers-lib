@@ -1,365 +1,364 @@
 #include <thread>
 #include <functional>
+namespace ycontainer {
+    
+    using ulong = unsigned long;
+    using uint = unsigned int;
 
-using ulong = unsigned long;
-using uint = unsigned int;
+    template <typename type>
+    class list {
+        public:
 
-template <typename T>
-class List {
-    public:
+            struct node {
+                type data;
+                node* next_node;
+            };
 
-        struct Node {
-            T data;
-            Node* nextNode;
-        };
+            class iterator {
+                private:
+                    node* pointer;
+                public:
+                    iterator() = default;
+                    iterator(node* ptr) : pointer(ptr) {}
 
-        class Iterator {
-            private:
-                Node* pointer;
-            public:
-                Iterator() = default;
-                Iterator(Node* ptr) : pointer(ptr) {}
+                    void operator=(const iterator& it) {
+                        this->pointer = it.pointer;
+                    }
+                    bool operator!=(const iterator& it) {
+                        return this->pointer != it.pointer;
+                    }
+                    void operator++(int) {
+                        this->pointer = this->pointer->next_node;
+                    }
+                    void operator++() {
+                        this->pointer = this->pointer->next_node;
+                    }
+                    type& operator*() {
+                        return pointer->data;
+                    }
+                    node* thisnode() const { return this->pointer; }
+                    node* next_node() const { return this->pointer->next_node; }
+                    void destroy_inner_pointer() { delete this->pointer; this->pointer = nullptr; }
+            };
 
-                void operator=(const Iterator& it) {
-                    this->pointer = it.pointer;
+        public:
+
+            list(bool _set_sorted=false) : size(0), m_sorted(_set_sorted) {
+                startnode = endnode = nullptr;
+            }
+            list(std::initializer_list<type>&& ilist, bool _set_sorted=false) : list(_set_sorted) {
+                if(!m_sorted) {
+                    for(auto& item:ilist) {
+                        this->append(item);
+                    }
+                } else {
+
                 }
-                bool operator!=(const Iterator& it) {
-                    return this->pointer != it.pointer;
-                }
-                void operator++(int) {
-                    this->pointer = this->pointer->nextNode;
-                }
-                void operator++() {
-                    this->pointer = this->pointer->nextNode;
-                }
-                T& operator*() {
-                    return pointer->data;
-                }
-                Node* thisNode() const { return this->pointer; }
-                Node* nextNode() const { return this->pointer->nextNode; }
-                void destroyInnerPtr() { delete this->pointer; this->pointer = nullptr; }
-                //~Iterator() { this->destroyInnerPtr(); }
-        };
-
-    public:
-
-        List(bool setSorted=false) : size(0), isSorted(setSorted) {
-            startNode = endNode = nullptr;
-        }
-        List(std::initializer_list<T>&& ilist, bool setSorted=false) : List(setSorted) {
-            if(!isSorted) {
-                for(auto& item:ilist) {
+            }
+            list(list<type>* inlist, bool _set_sorted=false) : list(_set_sorted) {
+                for(auto& item:*inlist)
                     this->append(item);
+                delete inlist;
+            }
+            // void operator=(const list<type>& list) {
+            //     for(ulong i=0;i<list.length();i++) {
+            //         this->append(list.at(i));
+            //     }
+            // }
+            void operator=(const list<type>* list) {
+                for(ulong i=0;i<list->length();i++) {
+                    this->append(list->at(i));
+                } delete list;
+            }
+            ~list() {
+                while(startnode != nullptr) {
+                    node* node = startnode;
+                    startnode = startnode->next_node;
+                    delete node;
                 }
-            } else {
-
             }
-        }
-        List(List<T>* inlist, bool setSorted=false) : List(setSorted) {
-            for(auto& item:*inlist)
-                this->append(item);
-            delete inlist;
-        }
-        // void operator=(const List<T>& list) {
-        //     for(ulong i=0;i<list.length();i++) {
-        //         this->append(list.at(i));
-        //     }
-        // }
-        void operator=(const List<T>* list) {
-            for(ulong i=0;i<list->length();i++) {
-                this->append(list->at(i));
-            } delete list;
-        }
-        ~List() {
-            while(startNode != nullptr) {
-                Node* node = startNode;
-                startNode = startNode->nextNode;
-                delete node;
-            }
-            //this->monitor->join();
-            //delete this->monitor;
-        }
 
-        Iterator begin() const { return Iterator(startNode); }
-        Iterator end() const { return Iterator(nullptr); }
-        uint length() const { return this->size; }
+            iterator begin() const { return iterator(startnode); }
+            iterator end() const { return iterator(nullptr); }
+            uint length() const { return this->size; }
 
-        /**
-         * append() will insert a dataItem at the end of the list only
-        */
-        void append(T dataItem);
-        
-        /**
-         * insert() will insert the specified data at the specified index
-         * by default it will insert at the start
-        */
-        void insert(T item,ulong index=0);
-        
-        /**
-         * at() will return a read/write reference to the element at the specified index
-        */
-        T& at (ulong index) const;
-        
-        /**
-         * erase() will take the index of the element in the list which we want to remove
-        */
-        void erase(ulong index);
+            /**
+             * append() will insert a dataItem at the end of the list only
+            */
+            void append(type dataItem);
+            
+            /**
+             * insert() will insert the specified data at the specified index
+             * by default it will insert at the start
+            */
+            void insert(type item,ulong index=0);
+            
+            /**
+             * at() will return a read/write reference to the element at the specified index
+            */
+            type& at(ulong index) const;
+            
+            /**
+             * erase() will take the index of the element in the list which we want to remove
+            */
+            void erase(ulong index);
 
-        /**
-         * erase() will take the `iterator` of the element in the list which we want to remove
-        */
-        void erase(Iterator& indexIt);
+            /**
+             * erase() will take the `iterator` of the element in the list which we want to remove
+            */
+            void erase(iterator& indexIt);
 
-        /**
-         * popFront() will remove the first node in the list
-        */
-        T popFront();
+            /**
+             * pop_front() will remove the first node in the list
+            */
+            type pop_front();
 
-        /**
-         * popBack() will remove the last node in the list
-        */
-        T popBack();
+            /**
+             * pop_back() will remove the last node in the list
+            */
+            type pop_back();
 
-        /**
-         * find() will accept the value and will return the iterator to that element in this list
-         * if that element does not exist in this list then will return a nullptr Iterator
-        */
-        Iterator& find(T dataItem);
+            /**
+             * find() will accept the value and will return the iterator to that element in this list
+             * if that element does not exist in this list then will return a nullptr iterator
+            */
+            iterator& find(type dataItem);
 
-        /**
-         * contains() will return true if the given element exists in the list else will return false
-        */
-        bool contains(T dataItem);
+            /**
+             * contains() will return true if the given element exists in the list else will return false
+            */
+            bool contains(type dataItem);
 
-        /**
-         * count() will take a predicate and will execute for each dataItem in the list
-         * and will return the total number of times the predicate returned true
-        */
-        uint count(bool(*pred)(T& dataItem));
-        uint count(std::function<bool(T& dataItem)>&&);
+            /**
+             * count() will take a predicate and will execute for each dataItem in the list
+             * and will return the total number of times the predicate returned true
+            */
+            uint count(bool(*pred)(type& dataItem));
+            uint count(std::function<bool(type& dataItem)>&&);
 
-        /**
-         * This overloaded ' + ' operator will merge two lists into one
-        */
-        List<T>* operator+(const List<T>& inlist);
-        //List<T> operator+(const List<T>& inlist);
+            /**
+             * This overloaded ' + ' operator will merge two lists into one
+            */
+            list<type>* operator+(const list<type>& inlist);
+            //list<type> operator+(const list<type>& inlist);
 
-        /**
-         * sort() uses bubble sort to sort the list in ascending order
-        */
-        void sort(bool desc=false);
+            /**
+             * sort() uses bubble sort to sort the list in ascending order
+            */
+            void sort(bool desc=false);
 
-        /**
-         * extractFor() will check if the result of predicate is true for each element
-         * then return a new List<> for all true predicate
-        */
-        List<T>* extractFor(std::function<bool(T& dataItem)>&&);
-        List<T>* extractFor(std::function<bool(T& dataItem)>&&,uint);
+            /**
+             * extract_for() will check if the result of predicate is true for each element
+             * then return a new list<> for all true predicate
+            */
+            list<type>* extract_for(std::function<bool(type& dataItem)>&&);
+            list<type>* extract_for(std::function<bool(type& dataItem)>&&,uint);
 
-    private:
-        Node* startNode;
-        Node* endNode;
-        uint size;
-        bool isSorted;
-};
+        private:
+            node* startnode;
+            node* endnode;
+            uint size;
+            bool m_sorted;
+    };
 
-template<typename T>
-void List<T>::append(T dataItem) {
-    Node* temp = new Node;
-    temp->data = dataItem;
-    temp->nextNode = nullptr;
-    if(startNode == nullptr) {
-        // std::cout << "List is empty...\n";
-        startNode = temp;
-        endNode = startNode;
-        temp = nullptr;
-    } else {
-        // std::cout << "List has items...\n";
-        endNode->nextNode = temp;
-        endNode = endNode->nextNode;
-        temp = nullptr;
-    }
-    size++;
-}
-
-template <typename T>
-void List<T>::insert(T dataItem, ulong index) {
-    if(startNode == nullptr) {
-        if(index != 0) {
-            throw "Cannot insert at non zero index in empty list!";
-        }
-        this->append(dataItem);
-    } else {
-        if(index >= this->size) {
-            throw "IndexOutOfBoundsException";
-        }
-        Node* node = new Node;
-        node->data = dataItem;
-
-
-        if(index == 0) {
-            node->nextNode = startNode;
-            startNode = node;
-            size++;
+    template<typename type>
+    void list<type>::append(type dataItem) {
+        node* temp = new node;
+        temp->data = dataItem;
+        temp->next_node = nullptr;
+        if(startnode == nullptr) {
+            // std::cout << "list is empty...\n";
+            startnode = temp;
+            endnode = startnode;
+            temp = nullptr;
         } else {
-            Node* targetNode = startNode;
-            Node* prevNode = targetNode;
-            for(uint i=0;i<index;i++) {
-                prevNode = targetNode;
-                targetNode = targetNode->nextNode;
-                // if(targetNode == nullptr) {
-                //     throw "IndexOutOfBoundsException";
-                // }
-            }
-            node->nextNode = targetNode;
-            prevNode->nextNode = node;
-            size++;
+            // std::cout << "list has items...\n";
+            endnode->next_node = temp;
+            endnode = endnode->next_node;
+            temp = nullptr;
         }
-
-        node = nullptr;
+        size++;
     }
-}
 
-template <typename T>
-T& List<T>::at(ulong index) const {
-    Iterator it(startNode);
-    for(ulong i=0;i<index;i++) {
-        it++;
-    } return *it;
-}
+    template <typename type>
+    void list<type>::insert(type dataItem, ulong index) {
+        if(startnode == nullptr) {
+            if(index != 0) {
+                throw "Cannot insert at non zero index in empty list!";
+            }
+            this->append(dataItem);
+        } else {
+            if(index >= this->size) {
+                throw "IndexOutOfBoundsException";
+            }
+            node* l_node = new node;
+            l_node->data = dataItem;
 
-template <typename T>
-void List<T>::erase(ulong index) {
-    if(index >= this->size) {
-        throw "IndexOutOfBounds";
-    } else if(index == 0) {
-        this->popFront();
-    } else {
-        Node *prevNode, *targetNode = startNode;
-        for(ulong i=0;i<index;i++) { prevNode = targetNode; targetNode = targetNode->nextNode; }
-        prevNode->nextNode = targetNode->nextNode;
-        delete targetNode;
-        this->size--;
-    }
-}
 
-template <typename T>
-void List<T>::erase(Iterator& indexIt) {
-    if(indexIt.thisNode() == nullptr) return;
-    Node* prevNode = startNode;
-    while(prevNode->nextNode != indexIt.thisNode())
-        prevNode = prevNode->nextNode;
-    prevNode->nextNode = indexIt.nextNode();
-    indexIt.destroyInnerPtr();
-    indexIt.~Iterator();
-    this->size--;
-}
-
-template <typename T>
-T List<T>::popFront() {
-    if(this->startNode != nullptr) {
-        Node* targetNode = startNode;
-        T data = targetNode->data;
-        startNode = startNode->nextNode;
-        delete targetNode;
-        this->size--;
-        return data;
-    } return T{};
-}
-
-template <typename T>
-T  List<T>::popBack() {
-    if(length() >= 2) {
-        Node* targetNode = startNode;
-        while(targetNode->nextNode->nextNode != nullptr) {
-            targetNode = targetNode->nextNode;
-        } T data = targetNode->nextNode->data;
-        delete targetNode->nextNode;
-        targetNode->nextNode = nullptr;
-        this->size--;
-        return data;
-    } else {
-        return this->popFront();
-    }
-}
-
-template <typename T>
-List<T>* List<T>::operator+(const List<T>& inlist) {
-    // needs a lot of improvement
-    List<T> *list=new List<T>;
-    for(auto& item:*this) {
-        list->append(item);
-    }    
-    for(T& item:inlist) {
-        list->append(item);
-    } return list;
-}
-
-// template <typename T>
-// List<T> List<T>::operator+(const List<T>& inlist) {
-//     // needs a lot of improvement
-//     List<T> list;
-//     for(auto& item:*this) {
-//         list.append(item);
-//     }    
-//     for(T& item:inlist) {
-//         list.append(item);
-//     } return list;
-// }
-
-template <typename T>
-void List<T>::sort(bool desc) {
-    for( ulong i=0; i < this->size; i++ ) {
-        for( ulong j=0; j < this->size-1; j++ ) {
-            if(desc) {
-                if(this->at(j) <= this->at(j+1)) {
-                    T temp = this->at(j);
-                    this->at(j) = this->at(j+1);
-                    this->at(j+1) = temp;
-                }
+            if(index == 0) {
+                l_node->next_node = startnode;
+                startnode = l_node;
+                size++;
             } else {
-                if(this->at(j) >= this->at(j+1)) {
-                    T temp = this->at(j);
-                    this->at(j) = this->at(j+1);
-                    this->at(j+1) = temp;
+                node* targetnode = startnode;
+                node* prevnode = targetnode;
+                for(uint i=0;i<index;i++) {
+                    prevnode = targetnode;
+                    targetnode = targetnode->next_node;
+                    // if(targetnode == nullptr) {
+                    //     throw "IndexOutOfBoundsException";
+                    // }
+                }
+                l_node->next_node = targetnode;
+                prevnode->next_node = l_node;
+                size++;
+            }
+
+            l_node = nullptr;
+        }
+    }
+
+    template <typename type>
+    type& list<type>::at(ulong index) const {
+        iterator it(startnode);
+        for(ulong i=0;i<index;i++) {
+            it++;
+        } return *it;
+    }
+
+    template <typename type>
+    void list<type>::erase(ulong index) {
+        if(index >= this->size) {
+            throw "IndexOutOfBounds";
+        } else if(index == 0) {
+            this->pop_front();
+        } else {
+            node *prevnode, *targetnode = startnode;
+            for(ulong i=0;i<index;i++) { prevnode = targetnode; targetnode = targetnode->next_node; }
+            prevnode->next_node = targetnode->next_node;
+            delete targetnode;
+            this->size--;
+        }
+    }
+
+    template <typename type>
+    void list<type>::erase(iterator& indexIt) {
+        if(indexIt.thisnode() == nullptr) return;
+        node* prevnode = startnode;
+        while(prevnode->next_node != indexIt.thisnode())
+            prevnode = prevnode->next_node;
+        prevnode->next_node = indexIt.next_node();
+        indexIt.destroy_inner_pointer();
+        indexIt.~iterator();
+        this->size--;
+    }
+
+    template <typename type>
+    type list<type>::pop_front() {
+        if(this->startnode != nullptr) {
+            node* targetnode = startnode;
+            type data = targetnode->data;
+            startnode = startnode->next_node;
+            delete targetnode;
+            this->size--;
+            return data;
+        } return type{};
+    }
+
+    template <typename type>
+    type  list<type>::pop_back() {
+        if(length() >= 2) {
+            node* targetnode = startnode;
+            while(targetnode->next_node->next_node != nullptr) {
+                targetnode = targetnode->next_node;
+            } type data = targetnode->next_node->data;
+            delete targetnode->next_node;
+            targetnode->next_node = nullptr;
+            this->size--;
+            return data;
+        } else {
+            return this->pop_front();
+        }
+    }
+
+    template <typename type>
+    list<type>* list<type>::operator+(const list<type>& inlist) {
+        // needs a lot of improvement
+        list<type> *list_var=new list<type>;
+        for(auto& item:*this) {
+            list_var->append(item);
+        }    
+        for(type& item:inlist) {
+            list_var->append(item);
+        } return list_var;
+    }
+
+    // template <typename T>
+    // list<type> list<type>::operator+(const list<type>& inlist) {
+    //     // needs a lot of improvement
+    //     list<type> list;
+    //     for(auto& item:*this) {
+    //         list.append(item);
+    //     }    
+    //     for(T& item:inlist) {
+    //         list.append(item);
+    //     } return list;
+    // }
+
+    template <typename type>
+    void list<type>::sort(bool desc) {
+        for( ulong i=0; i < this->size; i++ ) {
+            for( ulong j=0; j < this->size-1; j++ ) {
+                if(desc) {
+                    if(this->at(j) <= this->at(j+1)) {
+                        type temp = this->at(j);
+                        this->at(j) = this->at(j+1);
+                        this->at(j+1) = temp;
+                    }
+                } else {
+                    if(this->at(j) >= this->at(j+1)) {
+                        type temp = this->at(j);
+                        this->at(j) = this->at(j+1);
+                        this->at(j+1) = temp;
+                    }
                 }
             }
         }
     }
-}
 
-template <typename T>
-uint List<T>::count(std::function<bool(T& dataItem)>&& predicate) {
-    std::cout << "using std::functional\n";
-    uint count{0};
-    for(T& item:*this) {
-        (predicate(item) ? count++ : count=count);
-    } return count;
-}
+    template <typename type>
+    uint list<type>::count(std::function<bool(type& dataItem)>&& predicate) {
+        std::cout << "using std::functional\n";
+        uint count{0};
+        for(type& item:*this) {
+            (predicate(item) ? count++ : count=count);
+        } return count;
+    }
 
-template <typename T>
-uint List<T>::count(bool(*predicate)(T& dataItem)) {
-    std::cout << "using function pointer\n";
-    return this->count(std::function<bool(T& dataItem)>(predicate));
-}
+    template <typename type>
+    uint list<type>::count(bool(*predicate)(type& dataItem)) {
+        std::cout << "using function pointer\n";
+        return this->count(std::function<bool(type& dataItem)>(predicate));
+    }
 
-template <typename T>
-List<T>* List<T>::extractFor(std::function<bool(T& dataItem)>&& predicate) {
-    List<T>* list = new List<T>;
-    for(auto& item:*this) {
-        if(predicate(item)) {
-            list->append(item);
-        }
-    } return list;
-}
+    template <typename type>
+    list<type>* list<type>::extract_for(std::function<bool(type& dataItem)>&& predicate) {
+        list<type>* list_var = new list<type>;
+        for(auto& item:*this) {
+            if(predicate(item)) {
+                list_var->append(item);
+            }
+        } return list_var;
+    }
 
-template <typename T>
-List<T>* List<T>::extractFor(std::function<bool(T& dataItem)>&& predicate, uint limit) {
-    List<T>* list = new List<T>; uint i{0};
-    for(auto& item:*this) {
-        if(i >= limit) break;
-        if(predicate(item)) {
-            list->append(item);
-        } i++;
-    } return list;
-}
+    template <typename type>
+    list<type>* list<type>::extract_for(std::function<bool(type& dataItem)>&& predicate, uint limit) {
+        list<type>* list_var = new list<type>; uint i{0};
+        for(auto& item:*this) {
+            if(i >= limit) break;
+            if(predicate(item)) {
+                list_var->append(item);
+            } i++;
+        } return list_var;
+    }
+} // namespace container

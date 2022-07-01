@@ -1,12 +1,11 @@
 #include <iostream>
 #include <thread>
-#include <vector>
 #include "list.hpp"
 
 using namespace std;
 using namespace chrono;
 
-void show(List<int>& list) {
+void show(ycontainer::list<int>& list) {
     for(auto& item:list) {
         std::cout << item << std::endl;
     }
@@ -14,7 +13,7 @@ void show(List<int>& list) {
 
 int main(int argc, char const *argv[]) {
 
-    List<int> list;
+    ycontainer::list<int> list;
 
     for(int i=0;i<5;i++) {
         list.append(i*2);
@@ -40,10 +39,10 @@ int main(int argc, char const *argv[]) {
     }
     show(list);
     std::cout << "-----------\n";
-    list.popBack();
+    list.pop_back();
     show(list);
 
-    List<int>::Iterator it = list.begin();
+    ycontainer::list<int>::iterator it = list.begin();
     for(ulong i=0;i<list.length()-1;i++) {
         it++;
     }
