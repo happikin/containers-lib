@@ -1,11 +1,9 @@
 #include "gtest/gtest.h"
 #include "matrix.hpp"
 
-using namespace ylib::math;
-
-TEST(matrixTest, allocator_test) {
+TEST(MatrixTest, allocator_test) {
     const int allocator = 10;
-    matrix<int> mat1(4,4,allocator);
+    ycontainer::matrix<int> mat1(4,4,allocator);
 
     for(size_t i{}; i < mat1.row_size(); i++) {
         for(size_t j{}; j < mat1.col_size(); j++) {
@@ -14,9 +12,9 @@ TEST(matrixTest, allocator_test) {
     }
 }
 
-TEST(matrixTest, copy_ctor_test) {
-    matrix<float> mat1(4,4,13);
-    matrix<float> mat2 = mat1;
+TEST(MatrixTest, copy_ctor_test) {
+    ycontainer::matrix<float> mat1(4,4,13);
+    ycontainer::matrix<float> mat2 = mat1;
 
     EXPECT_EQ(mat1.row_size(), mat2.row_size());
     EXPECT_EQ(mat1.col_size(), mat2.col_size());
@@ -27,25 +25,25 @@ TEST(matrixTest, copy_ctor_test) {
 
 }
 
-TEST(matrixTest, overloaded_equality_test) {
-    matrix<float> mat1(4,4,1);
-    matrix<float> mat2(4,4,1);
+TEST(MatrixTest, overloaded_equality_test) {
+    ycontainer::matrix<float> mat1(4,4,1);
+    ycontainer::matrix<float> mat2(4,4,1);
     
     EXPECT_TRUE(mat1 == mat2);
 }
 
-TEST(matrixTest, get_data_test) {
-    matrix<float> mat1(10,10,99);
+TEST(MatrixTest, get_data_test) {
+    ycontainer::matrix<float> mat1(10,10,99);
     auto data =  mat1.get_data();   
 }
 
-TEST(matrixTest, resize_test) {
+TEST(MatrixTest, resize_test) {
     
     long default_value = 45;
     bool preserve{};
 
     ///// with preserve set to true
-    matrix<long> mat1(2000,2000,default_value);
+    ycontainer::matrix<long> mat1(2000,2000,default_value);
     size_t old_row_size = mat1.row_size();
     size_t old_col_size = mat1.col_size();
 
@@ -63,7 +61,7 @@ TEST(matrixTest, resize_test) {
     }
     
     ///// with preserve set to false
-    matrix<long> mat2(2000,2000,default_value);
+    ycontainer::matrix<long> mat2(2000,2000,default_value);
     old_row_size = mat2.row_size();
     old_col_size = mat2.col_size();
 
@@ -88,8 +86,8 @@ TEST(matrixTest, resize_test) {
 
 }
 
-TEST(matrixTest, nonsquare_matrix_test) {
-    matrix<uint8_t> mat1(100,80);
+TEST(MatrixTest, nonsquare_matrix_test) {
+    ycontainer::matrix<uint8_t> mat1(100,80);
 
     // for(size_t i{};i<mat1.row_size();i++) {
     //     for(size_t j{};j<mat1.col_size();j++) {
@@ -98,4 +96,57 @@ TEST(matrixTest, nonsquare_matrix_test) {
     // } std::cout << "\n";
 
     mat1.resize(80,100);
+}
+
+TEST(MatrixTest, reset_test) {
+    ycontainer::matrix<std::string> mat1(2,2,"yashesvi");
+    
+    mat1.reset();
+
+    EXPECT_EQ(mat1.get_data(), nullptr);
+    EXPECT_EQ(mat1.row_size(), 0);
+    EXPECT_EQ(mat1.col_size(), 0);
+}
+
+TEST(MatrixTest, identity_type_test) {
+    ycontainer::matrix<int> mat1(5,5,ycontainer::matrix_type::identity);
+    for(size_t i{}; i<mat1.row_size(); i++) {
+        for(size_t j{}; j<mat1.col_size(); j++) {
+            if(i == j) {
+                EXPECT_EQ(1, mat1(i,j));
+            } else EXPECT_EQ(0, mat1(i,j));
+        }
+    }
+    // ycontainer::matrix<int>::print(mat1);
+}
+
+TEST(MatrixTest, square_matrix_test) {
+    ycontainer::matrix<int> mat(5,5);
+    EXPECT_EQ(mat.is_square_matrix(), true);
+}
+
+TEST(MatrixTest, symmetricity_test) {
+    ycontainer::matrix<int> mat(50,50, ycontainer::matrix_type::identity);
+    EXPECT_TRUE(mat.is_symmetric_matrix());
+    mat(2,3) = 43;
+    EXPECT_FALSE(mat.is_symmetric_matrix());
+    // ycontainer::matrix<int>::print(mat);
+}
+
+TEST(MatrixTest, identity_check_test) {
+    ycontainer::matrix<int> mat(5,5,ycontainer::matrix_type::identity);
+    EXPECT_TRUE(mat.is_identity_matrix());
+}
+
+TEST(MatrixTest, get_first_index_test) {
+    ycontainer::matrix<int> mat(5,5);
+    size_t i=2;
+    size_t j=3;
+    mat(i,j) = 4;
+    ycontainer::matrix<int>::print(mat);
+    std::pair<size_t,size_t> index_pair = mat.get_first_index(4);
+    
+    EXPECT_EQ(i,index_pair.first);
+    EXPECT_EQ(j,index_pair.second);
+
 }
