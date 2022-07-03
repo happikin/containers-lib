@@ -6,10 +6,30 @@
 #include <functional>
 #endif
 
+#ifndef VECTOR
+#include <vector>
+#endif
+#include <stdexcept>
+
 namespace ycontainer {
+
     enum matrix_type {
         identity
     };
+
+    enum snip_position {
+        top_left,
+        top_right,
+        bottom_right,
+        bottom_left
+    };
+
+    struct snip_setting {
+        snip_position m_pos;
+        size_t i;
+        size_t j;
+    };
+
     template <typename type>
     class matrix {
         public:
@@ -66,10 +86,13 @@ namespace ycontainer {
 
             type& operator() (size_t _i, size_t _j) {
 
-                if(this->data != nullptr)
+                if(this->data != nullptr) {
+                    if(_i >= this->m_rows || _j >= this->m_cols) {
+                        throw std::out_of_range("OutOfBoundsAccess@("+ std::to_string(_i) + "," + std::to_string(_j) + ")");
+                    }
                     return this->data[this->m_cols*_i + _j];
-                else
-                    throw "AccessOutOfBounds";
+                } else
+                    throw std::out_of_range("IllegalAccess@("+ std::to_string(_i) + "," + std::to_string(_j) + ")");
 
             }
 
@@ -103,7 +126,6 @@ namespace ycontainer {
              * or the pointer allocation outside of the scope of this class
             */
             const type* get_data() const { return const_cast<type*>(this->data); }
-            bool is_square_matrix() const { return this->m_rows == this->m_cols; }
             size_t row_size() const { return this->m_rows; }
             size_t col_size() const { return this->m_cols; }
             size_t size() const { return (this->m_rows * this->m_cols); }
@@ -123,6 +145,8 @@ namespace ycontainer {
             */
             void reset();
 
+            bool is_square_matrix() const { return this->m_rows == this->m_cols; }
+            
             /**
              * is_symmetric_matrix();
              * this function will check the matrix dimensions and internal data
@@ -148,10 +172,44 @@ namespace ycontainer {
             std::pair<size_t,size_t> get_first_index(type&);
 
             /**
+             * get_all_index();
+             * this function takes in two arguments, one the value we need to search
+             * second is the max number of indexes we wish to return with default value 0,
+             * which means if we specify _limit = 2 then a std::vector of std::pair
+             * containing 1st two occurences will be returned and if _limit is left as 0
+             * then indexes for all occurences will be returned
+            */
+            std::vector<std::pair<size_t,size_t>> get_all_index(type, size_t _limit = 0);
+
+            /**
+             * second overload of get_all_index() has been provided taking into consideration
+             * a case when the matrix is really huge and if number of matching occurences
+             * same as the size of matrix then returning that index vector by value is
+             * a bad choice. So the use of this overload is left to programmers wit
+            */
+            size_t get_all_index(
+                type _data,
+                std::vector<std::pair<size_t,size_t>>& _index_vec,
+                size_t _limit = 0
+            );
+
+            /**
              * print();
              * this function will print the supplied matrix in simple box format
             */
-            static void print(ycontainer::matrix<type>&);
+            static void print(ycontainer::matrix<type>&) noexcept;
+
+            /**
+             * snip();
+             * will select the sub matrix of dimension _newrows X _newcols starting from
+             * specified _snip_pointer from the _src_matrix and construct _dest_matrix
+            */
+            // static void snip(
+            //     ycontainer::matrix<type>& _dest_matrix,
+            //     ycontainer::matrix<type>& _src_matrix,
+            //     ycontainer::snip_setting _snip_pointer,
+            //     size_t _newrows, size_t _newcols
+            // );
             // static void for_each(ycontainer::matrix<type>&, std::function<bool(type&,bool)>& _pred);
         private:
             type* data;
@@ -192,7 +250,7 @@ namespace ycontainer {
     }
 
     template <typename type>
-    void matrix<type>::print(matrix<type>& _mat) {
+    void matrix<type>::print(matrix<type>& _mat) noexcept {
         for(size_t i{}; i < _mat.row_size(); i++) {
             for(size_t j{}; j < _mat.col_size(); j++) {
                 std::cout << _mat(i,j) << " ";
@@ -263,4 +321,109 @@ namespace ycontainer {
         return index_local;
     }
 
-} // namespace container
+    template <typename type>
+    std::vector<std::pair<size_t,size_t>> matrix<type>::get_all_index(type _data, size_t _limit) {
+        std::vector<std::pair<size_t,size_t>> index_vector;
+        for(size_t i{};i<this->m_rows;i++) {
+            for(size_t j{};j<this->m_cols;j++) {
+                if(_limit != 0) {
+                    if(index_vector.size() >= _limit) break;
+                }
+                if((*this)(i,j) == _data) {
+                    index_vector.push_back(std::make_pair(i,j));
+                }
+            }
+        } return index_vector;
+    }
+
+    template <typename type>
+    size_t matrix<type>::get_all_index(
+        type _data,
+        std::vector<std::pair<size_t,size_t>>& _index_vec,
+        size_t _limit
+    ) {
+        _index_vec.clear();
+        for(size_t i{};i<this->m_rows;i++) {
+            for(size_t j{};j<this->m_cols;j++) {
+                if(_limit != 0) {
+                    if(_index_vec.size() >= _limit) break;
+                }
+                if((*this)(i,j) == _data) {
+                    _index_vec.push_back(std::make_pair(i,j));
+                }
+            }
+        } return _index_vec.size();
+    }
+
+} // namespace ycontainer
+
+namespace ycontainer {
+    namespace utils {
+
+        template <typename type>
+        void print(matrix<type>& _mat) noexcept {
+            for(size_t i{}; i < _mat.row_size(); i++) {
+                for(size_t j{}; j < _mat.col_size(); j++) {
+                    std::cout << _mat(i,j) << " ";
+                } std::cout << "\n";
+            } std::cout << "\n";
+        }
+
+        /**
+         * snip();
+         * will select the sub matrix of dimension _newrows X _newcols starting from
+         * specified _snip_pointer from the _src_matrix and construct _dest_matrix
+        */
+        template <typename type>
+        void snip(
+            ycontainer::matrix<type>& _dest_matrix,
+            ycontainer::matrix<type>& _src_matrix,
+            ycontainer::snip_setting _snip_pointer,
+            size_t _newrows, size_t _newcols
+        ) {
+            // one thing to note is that the new matrix dimensions need to be smaller or equal
+            // to the _src_mat even after applying the _snip_pointer
+            _dest_matrix.resize(_newrows,_newcols,false);
+
+            ycontainer::snip_position const _pos = _snip_pointer.m_pos;
+            
+            switch(_pos) {
+                
+                case ycontainer::snip_position::top_left: {
+                    size_t initial_i = _snip_pointer.i;
+                    size_t limit_i = initial_i + _newrows;
+                    size_t initial_j = _snip_pointer.j;
+                    size_t limit_j = initial_j + _newcols;
+                    for(size_t i1{initial_i},i2{0}; i1<limit_i, i2<_newrows; i1++, i2++) {
+                        for(size_t j1{initial_j}, j2{0}; j1<limit_j, j2<_newcols; j1++, j2++) {
+                            // std::cout << "(" << i1 << "," << j1 << ") => " << _src_matrix(i1,j1) << "\n";
+                            std::cout << "src: (" << i1 << "," << j1 << ") => " << "dest: (" << i2 << "," << j2 << ")\n";
+                            _dest_matrix(i2,j2) = _src_matrix(i1,j1);
+                        }
+                    }
+                } break;
+
+                case ycontainer::snip_position::top_right: {
+                    // size_t initial_i = _snip_pointer.i;
+                    // size_t limit_i = initial_i + _newrows;
+                    // size_t initial_j = _src_matrix.col_size() - _snip_pointer.j - 1;
+                    // size_t limit_j = initial_j - _newcols;
+                    
+                    size_t initial_i = _snip_pointer.i;
+                    size_t limit_i = initial_i + _newrows;
+                    size_t initial_j = _snip_pointer.j;
+                    size_t limit_j = initial_j - _newcols;
+                    for(size_t i1{initial_i}, i2{0}; i1 < limit_i && i2 < _newrows; i1++, i2++) {
+                        for(size_t j1{initial_j}, j2{_newcols-1}; j1 > limit_j && j2 >= 0; j1--, j2--) {
+                            std::cout << "src: (" << i1 << "," << j1 << ") => " << "dest: (" << i2 << "," << j2 << ")\n";
+                            _dest_matrix(i2,j2) = _src_matrix(i1,j1);
+                        }
+                    }
+                } break;
+
+                default:
+                    break;
+            }
+        }
+    }
+} // namespace ycontainer

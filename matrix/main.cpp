@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "matrix.hpp"
 
 int main(int argc, char *argv[]) {
@@ -7,5 +8,8 @@ int main(int argc, char *argv[]) {
 
     ycontainer::matrix<int> mat3(1000,1000,10);
     mat3.resize(1920,1080,true);
+
+    std::vector<int> nums{2,4,1,6,3,4,5,8};
+
     return 0;
 }

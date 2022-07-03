@@ -143,10 +143,94 @@ TEST(MatrixTest, get_first_index_test) {
     size_t i=2;
     size_t j=3;
     mat(i,j) = 4;
-    ycontainer::matrix<int>::print(mat);
+    // ycontainer::matrix<int>::print(mat);
     std::pair<size_t,size_t> index_pair = mat.get_first_index(4);
     
     EXPECT_EQ(i,index_pair.first);
     EXPECT_EQ(j,index_pair.second);
 
+}
+
+TEST(MatrixTest, get_all_index_test1) {
+    ycontainer::matrix<int> mat(5,5);
+    
+    size_t i1 = 1;
+    size_t j1 = 3;
+    mat(i1,j1) = 44;
+
+    size_t i2 = 3;
+    size_t j2 = 4;
+    mat(i2,j2) = 44;
+
+    auto indexes = mat.get_all_index(44);
+
+    EXPECT_EQ(indexes[0].first,i1);
+    EXPECT_EQ(indexes[0].second,j1);
+
+    EXPECT_EQ(indexes[1].first,i2);
+    EXPECT_EQ(indexes[1].second,j2);
+
+    // for(auto& index:indexes) {
+    //     std::cout << "(" << index.first << "," << index.second << ")\n";
+    // }
+}
+
+TEST(MatrixTest, get_all_index_test2) {
+    ycontainer::matrix<int> mat(5,5);
+    
+    size_t i1 = 1;
+    size_t j1 = 3;
+    mat(i1,j1) = 44;
+
+    size_t i2 = 3;
+    size_t j2 = 4;
+    mat(i2,j2) = 44;
+
+    std::vector<std::pair<size_t,size_t>> indexes;
+    auto index_count = mat.get_all_index(44,indexes);
+
+    EXPECT_EQ(indexes[0].first,i1);
+    EXPECT_EQ(indexes[0].second,j1);
+
+    EXPECT_EQ(indexes[1].first,i2);
+    EXPECT_EQ(indexes[1].second,j2);
+
+    // for(auto& index:indexes) {
+    //     std::cout << "(" << index.first << "," << index.second << ")\n";
+    // }
+}
+
+TEST(MatrixTest, snip_test) {
+    ycontainer::matrix<int> src_matrix(6,6,0);
+    ycontainer::matrix<int> dest_matrix;
+    
+    src_matrix(1,1) = 1;
+    src_matrix(1,4) = 1;
+    src_matrix(2,2) = 1;
+    src_matrix(2,3) = 1;
+    src_matrix(3,2) = 1;
+    src_matrix(3,3) = 1;
+    src_matrix(4,4) = 1;
+    src_matrix(4,1) = 1;
+
+    ycontainer::utils::print(src_matrix);
+
+    std::cout << "test for snip_position::top_left\n";
+    ycontainer::snip_setting setting{ycontainer::snip_position::top_left,1,1};
+
+    try {
+        ycontainer::utils::snip(dest_matrix,src_matrix,setting,2,2);
+    } catch(const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    } ycontainer::utils::print(dest_matrix);
+
+    std::cout << "test for snip_position::top_right\n";
+    dest_matrix.reset();
+    setting = {ycontainer::snip_position::top_right,1,4};
+
+    try {
+        ycontainer::utils::snip(dest_matrix,src_matrix,setting,2,2);
+    } catch(const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    } ycontainer::utils::print(dest_matrix);
 }
