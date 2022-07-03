@@ -384,16 +384,19 @@ namespace ycontainer {
             // one thing to note is that the new matrix dimensions need to be smaller or equal
             // to the _src_mat even after applying the _snip_pointer
             _dest_matrix.resize(_newrows,_newcols,false);
-
+            size_t initial_i;
+            size_t limit_i;
+            size_t initial_j;
+            size_t limit_j;
             ycontainer::snip_position const _pos = _snip_pointer.m_pos;
             
             switch(_pos) {
                 
                 case ycontainer::snip_position::top_left: {
-                    size_t initial_i = _snip_pointer.i;
-                    size_t limit_i = initial_i + _newrows;
-                    size_t initial_j = _snip_pointer.j;
-                    size_t limit_j = initial_j + _newcols;
+                    initial_i = _snip_pointer.i;
+                    limit_i = initial_i + _newrows;
+                    initial_j = _snip_pointer.j;
+                    limit_j = initial_j + _newcols;
                     for(size_t i1{initial_i},i2{0}; i1<limit_i, i2<_newrows; i1++, i2++) {
                         for(size_t j1{initial_j}, j2{0}; j1<limit_j, j2<_newcols; j1++, j2++) {
                             // std::cout << "(" << i1 << "," << j1 << ") => " << _src_matrix(i1,j1) << "\n";
@@ -409,12 +412,40 @@ namespace ycontainer {
                     // size_t initial_j = _src_matrix.col_size() - _snip_pointer.j - 1;
                     // size_t limit_j = initial_j - _newcols;
                     
-                    size_t initial_i = _snip_pointer.i;
-                    size_t limit_i = initial_i + _newrows;
-                    size_t initial_j = _snip_pointer.j;
-                    size_t limit_j = initial_j - _newcols;
+                    initial_i = _snip_pointer.i;
+                    limit_i = initial_i + _newrows;
+                    initial_j = _snip_pointer.j;
+                    limit_j = initial_j - _newcols;
                     for(size_t i1{initial_i}, i2{0}; i1 < limit_i && i2 < _newrows; i1++, i2++) {
                         for(size_t j1{initial_j}, j2{_newcols-1}; j1 > limit_j && j2 >= 0; j1--, j2--) {
+                            std::cout << "src: (" << i1 << "," << j1 << ") => " << "dest: (" << i2 << "," << j2 << ")\n";
+                            _dest_matrix(i2,j2) = _src_matrix(i1,j1);
+                        }
+                    }
+                } break;
+
+                case ycontainer::snip_position::bottom_right: {
+                    initial_i = _snip_pointer.i;
+                    limit_i = _snip_pointer.i - _newrows;
+                    initial_j = _snip_pointer.j;
+                    limit_j = _snip_pointer.j - _newcols;
+
+                    for(size_t i1{initial_i}, i2{_newrows-1}; i1>limit_i && i2>=0; i1--, i2--) {
+                        for(size_t j1{initial_j}, j2{_newcols-1}; j1>limit_j && j2>=0; j1--, j2--) {
+                            std::cout << "src: (" << i1 << "," << j1 << ") => " << "dest: (" << i2 << "," << j2 << ")\n";
+                            _dest_matrix(i2,j2) = _src_matrix(i1,j1);
+                        }
+                    }
+                } break;
+
+                case ycontainer::snip_position::bottom_left: {
+                    initial_i = _snip_pointer.i;
+                    limit_i = _snip_pointer.i - _newrows;
+                    initial_j = _snip_pointer.j;
+                    limit_j = _snip_pointer.j + _newcols;
+
+                    for(size_t i1{initial_i}, i2{_newrows-1}; i1>limit_i && i2>=0; i1--, i2--) {
+                        for(size_t j1{initial_j}, j2{0}; j1<limit_j && j2<_newcols; j1++, j2++) {
                             std::cout << "src: (" << i1 << "," << j1 << ") => " << "dest: (" << i2 << "," << j2 << ")\n";
                             _dest_matrix(i2,j2) = _src_matrix(i1,j1);
                         }

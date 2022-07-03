@@ -233,4 +233,25 @@ TEST(MatrixTest, snip_test) {
     } catch(const std::exception& e) {
         std::cerr << e.what() << '\n';
     } ycontainer::utils::print(dest_matrix);
+
+    std::cout << "test for snip_position::bottom_left\n";
+    dest_matrix.reset();
+    setting = {ycontainer::snip_position::bottom_left,4,1};
+
+    try {
+        ycontainer::utils::snip(dest_matrix,src_matrix,setting,2,2);
+    } catch(const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    } ycontainer::utils::print(dest_matrix);
+
+    std::cout << "test for snip_position::bottom_right\n";
+    dest_matrix.reset();
+    setting = {ycontainer::snip_position::bottom_right,4,4};
+
+    try {
+        ycontainer::utils::snip(dest_matrix,src_matrix,setting,2,2);
+    } catch(const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    } ycontainer::utils::print(dest_matrix);
+    
 }
