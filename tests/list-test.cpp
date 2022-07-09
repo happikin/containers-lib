@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include "list.hpp"
-
+#include <list>
+#include <chrono>
 TEST(ListTest, length_test) {
     ycontainer::list<int> l{1,2,3,4};
     EXPECT_EQ (l.length(),4);
@@ -81,4 +82,44 @@ TEST(ListTest, pop_front_test) {
 
     EXPECT_EQ(oldSize, newSize+1);
     EXPECT_EQ(insertedValue, poppedValue);
+}
+
+TEST(ListTest, multithreaded_insert_test) {
+    std::mutex _mutex;
+    ycontainer::list<std::string> buffer;
+
+    std::atomic<size_t> count{0};
+
+    //std::list<std::string> buffer;
+    std::function<void()> fun1 = [&]{
+        while (true) {
+            if(count >= 5) break;
+            {
+                std::lock_guard<std::mutex> guard(_mutex);
+                buffer.append("A");
+            }
+            count++;
+        }
+    };
+    std::function<void()> fun2 = [&]{
+        while (true) {
+            if(count >= 5) break;
+            {
+                std::lock_guard<std::mutex> guard(_mutex);
+                buffer.append("B");
+            }
+            count++;
+        }
+    };
+    
+    std::thread t1(fun1);
+    std::thread t2(fun2);
+
+
+    t1.join();
+    t2.join();
+
+    for(auto& item:buffer) {
+        std::cout << item << std::endl;
+    }
 }

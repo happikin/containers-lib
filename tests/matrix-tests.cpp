@@ -234,6 +234,16 @@ TEST(MatrixTest, snip_test) {
         std::cerr << e.what() << '\n';
     } ycontainer::utils::print(dest_matrix);
 
+    std::cout << "test for snip_position::bottom_right\n";
+    dest_matrix.reset();
+    setting = {ycontainer::snip_position::bottom_right,4,4};
+
+    try {
+        ycontainer::utils::snip(dest_matrix,src_matrix,setting,2,2);
+    } catch(const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    } ycontainer::utils::print(dest_matrix);
+
     std::cout << "test for snip_position::bottom_left\n";
     dest_matrix.reset();
     setting = {ycontainer::snip_position::bottom_left,4,1};
@@ -244,14 +254,72 @@ TEST(MatrixTest, snip_test) {
         std::cerr << e.what() << '\n';
     } ycontainer::utils::print(dest_matrix);
 
-    std::cout << "test for snip_position::bottom_right\n";
+
+    std::cout << "random test\n";
     dest_matrix.reset();
-    setting = {ycontainer::snip_position::bottom_right,4,4};
+    setting = {ycontainer::snip_position::bottom_left,5,0};
 
     try {
-        ycontainer::utils::snip(dest_matrix,src_matrix,setting,2,2);
+        ycontainer::utils::snip(dest_matrix,src_matrix,setting,6,6);
     } catch(const std::exception& e) {
         std::cerr << e.what() << '\n';
     } ycontainer::utils::print(dest_matrix);
-    
+
+}
+
+TEST(MatrixTest, misc_test1) {
+    struct pixel {
+        uint8_t red;
+        uint8_t green;
+        uint8_t blue;
+        uint8_t alpha;
+    };
+    ycontainer::matrix<pixel> mat(1920,1080);
+}
+
+TEST(MatrixTest, transpose_test) {
+    ycontainer::matrix<int> mat(3,3);
+
+    mat(0,0) = 0; mat(0,1) = 1; mat(0,2) = 2;
+    mat(1,0) = 3; mat(1,1) = 4; mat(1,2) = 5;
+    mat(2,0) = 6; mat(2,1) = 7; mat(2,2) = 8;
+
+    ycontainer::utils::print(mat);
+
+    mat.transpose();
+
+    for(size_t i{};i<1000000;i++) {
+        mat.transpose();
+    }
+
+}
+
+TEST(MatrixTest, addition_test) {
+    ycontainer::matrix<int> mat1(3,3);
+
+    mat1(0,0) = 0; mat1(0,1) = 1; mat1(0,2) = 2;
+    mat1(1,0) = 3; mat1(1,1) = 4; mat1(1,2) = 5;
+    mat1(2,0) = 6; mat1(2,1) = 7; mat1(2,2) = 8;
+
+    ycontainer::matrix<int> mat2(3,3,2);
+
+    ycontainer::matrix<int> out_mat = mat1 + mat2;
+
+    ycontainer::utils::print(out_mat);
+
+}
+
+TEST(MatrixTest, subtraction_test) {
+    ycontainer::matrix<int> mat1(3,3);
+
+    mat1(0,0) = 0; mat1(0,1) = 1; mat1(0,2) = 2;
+    mat1(1,0) = 3; mat1(1,1) = 4; mat1(1,2) = 5;
+    mat1(2,0) = 6; mat1(2,1) = 7; mat1(2,2) = 8;
+
+    ycontainer::matrix<int> mat2(3,3,2);
+
+    ycontainer::matrix<int> out_mat = mat1 - mat2;
+
+    ycontainer::utils::print(out_mat);
+
 }
