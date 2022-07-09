@@ -194,6 +194,26 @@ namespace ycontainer {
             );
 
             /**
+             * transpose();
+             * this function will simply transpose the inner data of the called upon matrix object
+            */
+            void transpose();
+
+            /**
+             * operator+();
+             * will simply add two matrices element by element and return a new matrix object
+            */
+            ycontainer::matrix<type> operator+(ycontainer::matrix<type>& _inmat);
+            
+            /**
+             * operator-();
+             * will simply subtract two matrices element by element and return
+             * a new matrix object
+            */
+            ycontainer::matrix<type> operator-(ycontainer::matrix<type>& _inmat);
+
+
+            /**
              * print();
              * this function will print the supplied matrix in simple box format
             */
@@ -355,6 +375,45 @@ namespace ycontainer {
         } return _index_vec.size();
     }
 
+    template <typename type>
+    void matrix<type>::transpose() {
+        if(!this->is_square_matrix()) throw std::range_error("this matrix not square matrix");
+        type* new_inner_data = new type[this->size()];
+        for(size_t i{};i<this->m_rows;i++) {
+            for(size_t j{};j<this->m_cols;j++) {
+                new_inner_data[j+(i*m_rows)] = this->data[(j*m_cols) + i];
+            }
+        } delete[] this->data;
+        this->data = new_inner_data;
+        new_inner_data = nullptr;
+    }
+
+    template <typename type>
+    ycontainer::matrix<type> matrix<type>::operator+(ycontainer::matrix<type>& _inmat) {
+        if(this->m_rows != _inmat.m_rows || this->m_cols != _inmat.m_cols)
+            throw std::string("dimension mismatch");
+        
+        ycontainer::matrix<type> result_mat(this->m_rows, this->m_cols);
+        for(size_t i{}; i<this->m_rows; i++) {
+            for(size_t j{}; j<this->m_cols; j++) {
+                result_mat(i,j) = (*this)(i,j) + _inmat(i,j);
+            }
+        } return result_mat;
+    }
+
+    template <typename type>
+    ycontainer::matrix<type> matrix<type>::operator-(ycontainer::matrix<type>& _inmat) {
+        if(this->m_rows != _inmat.m_rows || this->m_cols != _inmat.m_cols)
+            throw std::string("dimension mismatch");
+        
+        ycontainer::matrix<type> result_mat(this->m_rows, this->m_cols);
+        for(size_t i{}; i<this->m_rows; i++) {
+            for(size_t j{}; j<this->m_cols; j++) {
+                result_mat(i,j) = (*this)(i,j) - _inmat(i,j);
+            }
+        } return result_mat;
+    }
+
 } // namespace ycontainer
 
 namespace ycontainer {
@@ -407,11 +466,6 @@ namespace ycontainer {
                 } break;
 
                 case ycontainer::snip_position::top_right: {
-                    // size_t initial_i = _snip_pointer.i;
-                    // size_t limit_i = initial_i + _newrows;
-                    // size_t initial_j = _src_matrix.col_size() - _snip_pointer.j - 1;
-                    // size_t limit_j = initial_j - _newcols;
-                    
                     initial_i = _snip_pointer.i;
                     limit_i = initial_i + _newrows;
                     initial_j = _snip_pointer.j;
@@ -444,17 +498,19 @@ namespace ycontainer {
                     initial_j = _snip_pointer.j;
                     limit_j = _snip_pointer.j + _newcols;
 
-                    for(size_t i1{initial_i}, i2{_newrows-1}; i1>limit_i && i2>=0; i1--, i2--) {
-                        for(size_t j1{initial_j}, j2{0}; j1<limit_j && j2<_newcols; j1++, j2++) {
+                    for(size_t i1{initial_i}, i2{_newrows-1}; i1>limit_i , i2>=0; i1--, i2--) {
+                        for(size_t j1{initial_j}, j2{0}; j1<limit_j , j2<_newcols; j1++, j2++) {
                             std::cout << "src: (" << i1 << "," << j1 << ") => " << "dest: (" << i2 << "," << j2 << ")\n";
                             _dest_matrix(i2,j2) = _src_matrix(i1,j1);
                         }
                     }
                 } break;
 
-                default:
-                    break;
+                default: {
+                    throw std::invalid_argument("invalid snip_position supplied, please refer to enum snip_position");
+                } break;
             }
         }
-    }
+
+    } // namespace utils
 } // namespace ycontainer
