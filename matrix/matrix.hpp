@@ -201,35 +201,32 @@ namespace ycontainer {
 
             /**
              * operator+();
-             * will simply add two matrices element by element and return a new matrix object
+             * will simply add a constant value to each matrix element
+             * then return a new matrix object
             */
-            ycontainer::matrix<type> operator+(ycontainer::matrix<type>& _inmat);
+            ycontainer::matrix<type> operator+(type);
             
             /**
              * operator-();
-             * will simply subtract two matrices element by element and return
-             * a new matrix object
+             * will simply subtract a constant value from each matrix element
+             * then return a new matrix object
             */
-            ycontainer::matrix<type> operator-(ycontainer::matrix<type>& _inmat);
-
-
-            /**
-             * print();
-             * this function will print the supplied matrix in simple box format
-            */
-            static void print(ycontainer::matrix<type>&) noexcept;
+            ycontainer::matrix<type> operator-(type);
 
             /**
-             * snip();
-             * will select the sub matrix of dimension _newrows X _newcols starting from
-             * specified _snip_pointer from the _src_matrix and construct _dest_matrix
+             * operator*();
+             * will simply multiply a constant value with each matrix element
+             * then return a new matrix object
             */
-            // static void snip(
-            //     ycontainer::matrix<type>& _dest_matrix,
-            //     ycontainer::matrix<type>& _src_matrix,
-            //     ycontainer::snip_setting _snip_pointer,
-            //     size_t _newrows, size_t _newcols
-            // );
+            ycontainer::matrix<type> operator*(type);
+
+            /**
+             * operator/();
+             * will simply divide each matrix element by a constant value
+             * then return a new matrix object
+            */
+            ycontainer::matrix<type> operator/(type);
+
             // static void for_each(ycontainer::matrix<type>&, std::function<bool(type&,bool)>& _pred);
         private:
             type* data;
@@ -267,15 +264,6 @@ namespace ycontainer {
         this->m_rows = 0;
         this->m_cols = 0;
 
-    }
-
-    template <typename type>
-    void matrix<type>::print(matrix<type>& _mat) noexcept {
-        for(size_t i{}; i < _mat.row_size(); i++) {
-            for(size_t j{}; j < _mat.col_size(); j++) {
-                std::cout << _mat(i,j) << " ";
-            } std::cout << "\n";
-        } std::cout << "\n";
     }
 
     template <typename type>
@@ -389,35 +377,71 @@ namespace ycontainer {
     }
 
     template <typename type>
-    ycontainer::matrix<type> matrix<type>::operator+(ycontainer::matrix<type>& _inmat) {
-        if(this->m_rows != _inmat.m_rows || this->m_cols != _inmat.m_cols)
-            throw std::string("dimension mismatch");
+    ycontainer::matrix<type> matrix<type>::operator+(type _add_val) {
         
         ycontainer::matrix<type> result_mat(this->m_rows, this->m_cols);
         for(size_t i{}; i<this->m_rows; i++) {
             for(size_t j{}; j<this->m_cols; j++) {
-                result_mat(i,j) = (*this)(i,j) + _inmat(i,j);
+                result_mat(i,j) = (*this)(i,j) + _add_val;
             }
         } return result_mat;
     }
 
     template <typename type>
-    ycontainer::matrix<type> matrix<type>::operator-(ycontainer::matrix<type>& _inmat) {
-        if(this->m_rows != _inmat.m_rows || this->m_cols != _inmat.m_cols)
-            throw std::string("dimension mismatch");
-        
+    ycontainer::matrix<type> matrix<type>::operator-(type _sub_val) {
         ycontainer::matrix<type> result_mat(this->m_rows, this->m_cols);
         for(size_t i{}; i<this->m_rows; i++) {
             for(size_t j{}; j<this->m_cols; j++) {
-                result_mat(i,j) = (*this)(i,j) - _inmat(i,j);
+                result_mat(i,j) = (*this)(i,j) - _sub_val;
             }
         } return result_mat;
+    }
+    template <typename type>
+    matrix<type> ycontainer::matrix<type>::operator*(type _multiplier) {
+        ycontainer::matrix<type> return_mat(this->m_rows,this->m_cols);
+        type* inner_data = (type*)return_mat.get_data();
+        for(size_t i{};i<(m_cols*m_rows);i++) {
+            inner_data[i]= this->data[i]*_multiplier;
+        } return return_mat;
+    }
+
+    template <typename type>
+    matrix<type> ycontainer::matrix<type>::operator/(type _divisor) {
+        ycontainer::matrix<type> return_mat(this->m_rows,this->m_cols);
+        type* inner_data = (type*)return_mat.get_data();
+        for(size_t i{};i<(m_cols*m_rows);i++) {
+            inner_data[i]= this->data[i]/_divisor;
+        } return return_mat;
     }
 
 } // namespace ycontainer
 
 namespace ycontainer {
     namespace utils {
+
+        template <typename type>
+        void subtract(matrix<type>& _mat1, matrix<type>& _mat2, matrix<type>& _dest_mat) {
+            if(_mat1.row_size() != _mat2.row_size() || _mat1.col_size() != _mat2.col_size())
+                throw std::string("dimension mismatch");
+            _dest_mat.resize(_mat1.row_size(), _mat1.col_size(), false);            
+            for(size_t i{}; i<_mat1.row_size(); i++) {
+                for(size_t j{}; j<_mat1.col_size(); j++) {
+                    _dest_mat(i,j) = (_mat1)(i,j) - _mat2(i,j);
+                }
+            }
+        }
+
+        template <typename type>
+        void add(matrix<type>& _mat1, matrix<type>& _mat2, matrix<type>& _dest_mat) {
+            if(_mat1.row_size() != _mat2.row_size() || _mat1.col_size() != _mat2.col_size())
+                throw std::string("dimension mismatch");
+            _dest_mat.resize(_mat1.row_size(), _mat1.col_size(), false);            
+            for(size_t i{}; i<_mat1.row_size(); i++) {
+                for(size_t j{}; j<_mat1.col_size(); j++) {
+                    _dest_mat(i,j) = (_mat1)(i,j) + _mat2(i,j);
+                }
+            }
+        }
 
         template <typename type>
         void print(matrix<type>& _mat) noexcept {

@@ -303,7 +303,9 @@ TEST(MatrixTest, addition_test) {
 
     ycontainer::matrix<int> mat2(3,3,2);
 
-    ycontainer::matrix<int> out_mat = mat1 + mat2;
+    ycontainer::matrix<int> out_mat;
+
+    ycontainer::utils::add(mat1,mat2,out_mat);
 
     ycontainer::utils::print(out_mat);
 
@@ -318,8 +320,24 @@ TEST(MatrixTest, subtraction_test) {
 
     ycontainer::matrix<int> mat2(3,3,2);
 
-    ycontainer::matrix<int> out_mat = mat1 - mat2;
+    ycontainer::matrix<int> out_mat;
+
+    ycontainer::utils::subtract(mat1,mat2,out_mat);
 
     ycontainer::utils::print(out_mat);
 
+}
+
+TEST(MatrixTests, multiplication_test) {
+    ycontainer::matrix<int> mat(3,3,9);
+    ycontainer::utils::print(mat);
+    ycontainer::matrix<int> mat2 = mat*9;
+    ycontainer::utils::print(mat2);
+}
+
+TEST(MatrixTests, division_test) {
+    ycontainer::matrix<int> mat(3,3,9);
+    ycontainer::utils::print(mat);
+    ycontainer::matrix<int> mat2 = mat/9;
+    ycontainer::utils::print(mat2);
 }
