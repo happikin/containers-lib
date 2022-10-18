@@ -270,8 +270,7 @@ namespace ycontainer {
     bool matrix<type>::is_symmetric_matrix() {
         if(!this->is_square_matrix())
             return false;
-        else {
-            for(size_t i{}; i<this->m_rows; i++) {
+        else for(size_t i{}; i<this->m_rows; i++) {
                 for(size_t j{i+1}; j<this->m_cols; j++) {
                     if(i == j) continue;
                     else {
@@ -281,15 +280,13 @@ namespace ycontainer {
                     }
                 }
             } return true;
-        }
     }
 
     template <typename type>
     bool matrix<type>::is_identity_matrix() {
         if(!this->is_square_matrix())
             return false;
-        else {
-            for(size_t i{}; i<this->m_rows; i++) {
+        else for(size_t i{}; i<this->m_rows; i++) {
                 for(size_t j{}; j<this->m_cols; j++) {
                     if(i == j) {
                         if((*this)(i,j) != 1) return false;
@@ -298,7 +295,6 @@ namespace ycontainer {
                     }
                 }
             } return true;
-        }
     }   
 
     template <typename type>
@@ -441,6 +437,30 @@ namespace ycontainer {
                     _dest_mat(i,j) = (_mat1)(i,j) + _mat2(i,j);
                 }
             }
+        }
+
+        template <typename type>
+        void dot_product(matrix<type>& _mat1, matrix<type>& _mat2, matrix<type>& _dest_mat) {
+            if(_mat1.col_size() != _mat2.row_size())
+                throw std::string("dimension mismatch");
+            _dest_mat.resize(_mat1.row_size(),_mat2.col_size(),false);
+            for(size_t i{};i<_mat1.row_size();i++) {
+                for(size_t j{};j<_mat2.col_size();j++) {
+                    for(size_t k{};k<_mat2.col_size();k++) {
+                        _dest_mat(i,j) += _mat1(i,k) * _mat2(k,j);
+                    }
+                }
+            }
+        }
+
+        template <typename type>
+        void cross_product(matrix<type>& _mat1, matrix<type>& _mat2, matrix<type>& _dest_mat) {
+            
+        }
+
+        template <typename type>
+        void determinant(matrix<type>& _mat1, matrix<type>& _dest_mat) {
+            
         }
 
         template <typename type>

@@ -341,3 +341,12 @@ TEST(MatrixTests, division_test) {
     ycontainer::matrix<int> mat2 = mat/9;
     ycontainer::utils::print(mat2);
 }
+
+TEST(MatrixTests, dot_product_test) {
+    ycontainer::matrix<int> mat1(2,6,2);
+    ycontainer::matrix<int> mat2(7,4,2);
+    ycontainer::matrix<int> mat3;
+
+    ycontainer::utils::dot_product(mat1,mat2,mat3);
+    ycontainer::utils::print(mat3);
+}
