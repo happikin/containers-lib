@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 11)
 
 include_directories(list matrix binarytree)
-
+add_definitions(-DDEBUG_MODE)
 add_subdirectory(list)
 add_subdirectory(matrix)
 add_subdirectory(binarytree)
