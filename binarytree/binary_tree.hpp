@@ -6,8 +6,11 @@
 #ifdef DEBUG_MODE
 #endif
     #include <iostream>
+#include <list.hpp>
+
 #define isnull_macro(item) (item == nullptr)
 #define notnull_macro(item) (item != nullptr)
+
 namespace ycontainer {
     
     using size_t = unsigned long;
@@ -31,9 +34,7 @@ namespace ycontainer {
 
             binary_tree(insertion_type_e _insertiontype = insertion_type_e::default_order)
             :   m_root(nullptr), m_height(0),
-                m_node_count(0), m_insertion_type(_insertiontype) {
-                
-            }
+                m_node_count(0), m_insertion_type(_insertiontype) { }
 
             void insert(type);
             type* flatten();
@@ -46,14 +47,33 @@ namespace ycontainer {
             size_t m_height;
             size_t m_node_count;
             insertion_type_e m_insertion_type;
+            ycontainer::list<node*> m_addressbook;
 
         private: /* internal member functions */
             void default_insert(type);
             void inorder_insert(type);
             void preorder_insert(type);
             void postorder_insert(type);
+            node* malloc_node();
+            node* free_node(node* _node_address);
 
     };
+
+    template <typename type>
+    typename ycontainer::binary_tree<type>::node* binary_tree<type>::malloc_node() {
+        node* tmp_node = new node;
+        m_addressbook.append(tmp_node);
+        return tmp_node;
+    }
+
+    template <typename type>
+    typename ycontainer::binary_tree<type>::node* binary_tree<type>::free_node(node* _node_address) {
+        auto tmp_node = m_addressbook.find();
+        if((*tmp_node) != nullptr) {
+            m_addressbook.erase(tmp_node);
+            delete (*tmp_node);
+        }
+    }
 
     template <typename type>
     void binary_tree<type>::insert(type _dataitem) {
@@ -81,14 +101,14 @@ namespace ycontainer {
     template <typename type>
     void binary_tree<type>::default_insert(type _dataitem) {
         if(m_root == nullptr) {
-            node *tmp = new node;
+            node *tmp = malloc_node();
             tmp->data = _dataitem;
             tmp->left_node = nullptr;
             tmp->right_node = nullptr;
             m_root = tmp;
             tmp = nullptr;
         } else {
-            node *tmp = new node;
+            node *tmp = malloc_node();
             tmp->data = _dataitem;
             tmp->left_node = nullptr;
             tmp->right_node = nullptr;
@@ -154,7 +174,7 @@ namespace ycontainer {
                     if(isnull_macro(node_ptr->left_node) && isnull_macro(node_ptr->right_node)) {
                         std::cout << "first case\n";
                         if(isnull_macro(parent_node_ptr)) {
-                            delete node_ptr;
+                            free_node(node_ptr);
                             break;
                         } else {
                             if(parent_node_ptr->right_node == node_ptr) {
@@ -162,7 +182,7 @@ namespace ycontainer {
                             } else {
                                 parent_node_ptr->left_node = nullptr;
                             }
-                            delete node_ptr;
+                            free_node(node_ptr);
                             break;
                         }
                     } else if(notnull_macro(node_ptr->left_node) ^ notnull_macro(node_ptr->right_node)) {
@@ -171,7 +191,7 @@ namespace ycontainer {
                             if(notnull_macro(node_ptr->left_node)) {
                                 m_root = node_ptr->left_node;
                             } else m_root = node_ptr->right_node;
-                            delete node_ptr;
+                            free_node(node_ptr);
                             break;
                         } else {
                             if(notnull_macro(node_ptr->left_node)) {
@@ -183,7 +203,7 @@ namespace ycontainer {
                                     parent_node_ptr->left_node = node_ptr->right_node;
                                 } else parent_node_ptr->right_node = node_ptr->right_node;
                             }
-                            delete node_ptr;
+                            free_node(node_ptr);
                             break;
                         }
                     } else if(notnull_macro(node_ptr->left_node) && notnull_macro(node_ptr->right_node)) {
@@ -195,7 +215,7 @@ namespace ycontainer {
                                 tmp_node_ptr = tmp_node_ptr->right_node;
                             }
                             tmp_node_ptr->right_node = node_ptr->right_node;
-                            delete node_ptr;
+                            free_node(node_ptr);
                             break;
                         } else {
                             node* tmp_node_ptr = nullptr;
@@ -210,7 +230,7 @@ namespace ycontainer {
                                 tmp_node_ptr = tmp_node_ptr->right_node;
                             }
                             tmp_node_ptr->right_node = node_ptr->right_node;
-                            delete node_ptr;
+                            free_node(node_ptr);
                             break;
                         }
                     }
@@ -231,15 +251,9 @@ namespace ycontainer {
 
     template <typename type>
     binary_tree<type>::~binary_tree() {
-        if(notnull_macro(m_root->left_node)) {
-            std::thread([&](){
-                
-            });
-        }
-        if(notnull_macro(m_root->right_node)) {
-            std::thread([&](){
-                
-            });
+        std::cout << "node count: " << m_addressbook.length() << "\n";
+        for(size_t i{}; i < m_addressbook.length(); i++) {
+            delete m_addressbook.at(i);
         }
         std::cout << "destruction done\n";
     }

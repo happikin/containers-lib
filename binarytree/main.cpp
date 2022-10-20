@@ -30,7 +30,7 @@ int main(int argc, char const *argv[]) {
         std::cout << "found\n";
     }
 
-    b.delete_node(100);
+    // b.delete_node(100);
 
     return 0;
 }
