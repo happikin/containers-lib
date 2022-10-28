@@ -343,10 +343,15 @@ TEST(MatrixTests, division_test) {
 }
 
 TEST(MatrixTests, dot_product_test) {
-    ycontainer::matrix<int> mat1(2,6,2);
-    ycontainer::matrix<int> mat2(7,4,2);
-    ycontainer::matrix<int> mat3;
 
-    ycontainer::utils::dot_product(mat1,mat2,mat3);
-    ycontainer::utils::print(mat3);
+    try {
+        ycontainer::matrix<int> mat1(2,6,2);
+        ycontainer::matrix<int> mat2(7,4,2);
+        ycontainer::matrix<int> mat3;
+        ycontainer::utils::dot_product(mat1,mat2,mat3);
+        ycontainer::utils::print(mat3);
+    } catch(std::exception& e) {
+        std::cout << e.what() << "\n";
+        std::cout << "exception\n\n\n\n";
+    }
 }
