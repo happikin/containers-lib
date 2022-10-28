@@ -1,7 +1,7 @@
 project(dslib-project)
 cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 11)
-
+set(CMAKE_CXX_FLAGS "-g")
 include_directories(list matrix binarytree)
 add_definitions(-DDEBUG_MODE)
 add_subdirectory(list)
