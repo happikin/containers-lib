@@ -4,8 +4,8 @@
 */
 
 #ifdef DEBUG_MODE
-#endif
     #include <iostream>
+#endif
 #include <list.hpp>
 
 #define isnull_macro(item) (item == nullptr)
@@ -15,16 +15,97 @@ namespace ycontainer {
     
     using size_t = unsigned long;
     
-    enum insertion_type_e {
+    enum traversal_e {
         default_order = 0,
         inorder,
         preorder,
         postorder
     };
+    
+    template <typename type>
+    class binary_tree;
+
+    namespace util {
+
+        template <typename type>
+        void mirror(ycontainer::binary_tree<type>& _in) {
+            std::function<void(struct ycontainer::binary_tree<type>::node*)> local_mirror
+                = [&](struct ycontainer::binary_tree<type>::node* _node){
+                    if(isnull_macro(_node)) return;
+                    if(isnull_macro(_node->left_node) && isnull_macro(_node->right_node))
+                        return;
+                    
+                    local_mirror(_node->left_node);
+                    local_mirror(_node->right_node);
+
+                    decltype(_node) node_ptr = _node->left_node;
+                    _node->left_node = _node->right_node;
+                    _node->right_node = node_ptr;
+                };
+            local_mirror(_in.m_root);
+        }
+
+        template <typename type>
+        void print(ycontainer::binary_tree<type>& _in, const traversal_e _traversal) {
+            /**
+             * @brief this print function uses recirsion to print
+             * but will be soon transformed to use simple non-recursive logic
+            */
+            switch(_traversal) {
+                case traversal_e::inorder: {
+                    std::function<void(const struct ycontainer::binary_tree<type>::node*)> local_print
+                        = [&](const struct ycontainer::binary_tree<type>::node* _node){
+                        if(isnull_macro(_node)) return;
+                        local_print(_node->left_node);
+                        std::cout << _node->data << "\n";
+                        local_print(_node->right_node);
+                    };
+
+                    local_print(_in.m_root);
+                } break;
+                case traversal_e::preorder: {
+                    std::function<void(const struct ycontainer::binary_tree<type>::node*)> local_print
+                        = [&](const struct ycontainer::binary_tree<type>::node* _node){
+                        if(isnull_macro(_node)) return;
+                        std::cout << _node->data << "\n";
+                        local_print(_node->left_node);
+                        local_print(_node->right_node);
+                    };
+
+                    local_print(_in.m_root);
+                } break;
+                case traversal_e::postorder: {
+                    std::function<void(const struct ycontainer::binary_tree<type>::node*)> local_print
+                        = [&](const struct ycontainer::binary_tree<type>::node* _node){
+                        if(isnull_macro(_node)) return;
+                        local_print(_node->left_node);
+                        local_print(_node->right_node);
+                        std::cout << _node->data << "\n";
+                    };
+
+                    local_print(_in.m_root);
+                } break;
+                default: {
+                    throw std::invalid_argument("only inorder, preorder or postorder allowed");
+                }
+            }
+        }
+    
+    }
+
 
     template <typename type>
     class binary_tree {
+
         public:
+            template <typename type_1>
+            friend void ycontainer::util::print(
+                ycontainer::binary_tree<type_1>& _in,
+                const traversal_e _traversal);
+            
+            template <typename type_1>
+            friend void ycontainer::util::mirror(
+                ycontainer::binary_tree<type_1>& _in);
 
             struct node {
                 node* left_node;
@@ -32,64 +113,63 @@ namespace ycontainer {
                 node* right_node;
             };
 
-            binary_tree(insertion_type_e _insertiontype = insertion_type_e::default_order)
+            binary_tree(traversal_e _insertiontype = traversal_e::default_order)
             :   m_root(nullptr), m_height(0),
                 m_node_count(0), m_insertion_type(_insertiontype) { }
 
             void insert(type);
             type* flatten();
             node* find(type);
-            void delete_node(type _dataitem);
-            ~binary_tree();
+            void erase(type _dataitem);
+            // ~binary_tree();
 
         private: /* data fields */
             node* m_root;
             size_t m_height;
             size_t m_node_count;
-            insertion_type_e m_insertion_type;
-            ycontainer::list<node*> m_addressbook;
+            traversal_e m_insertion_type;
+            // ycontainer::list<node*> m_addressbook;
 
         private: /* internal member functions */
             void default_insert(type);
             void inorder_insert(type);
             void preorder_insert(type);
             void postorder_insert(type);
-            node* malloc_node();
-            node* free_node(node* _node_address);
+
+            // node* malloc_node();
+            // void free_node(node* _node_address);
 
     };
 
-    template <typename type>
-    typename ycontainer::binary_tree<type>::node* binary_tree<type>::malloc_node() {
-        node* tmp_node = new node;
-        m_addressbook.append(tmp_node);
-        return tmp_node;
-    }
+    // template <typename type>
+    // typename ycontainer::binary_tree<type>::node* binary_tree<type>::malloc_node() {
+    //     node* tmp_node = new node;
+    //     m_addressbook.append(tmp_node);
+    //     return tmp_node;
+    // }
 
-    template <typename type>
-    typename ycontainer::binary_tree<type>::node* binary_tree<type>::free_node(node* _node_address) {
-        auto tmp_node = m_addressbook.find();
-        if((*tmp_node) != nullptr) {
-            m_addressbook.erase(tmp_node);
-            delete (*tmp_node);
-        }
-    }
+    // template <typename type>
+    // void binary_tree<type>::free_node(node* _node_address) {
+    //     auto tmp_node = m_addressbook.find(_node_address);
+    //     if((*tmp_node) != nullptr) {
+    //         m_addressbook.erase(tmp_node);
+    //     }
+    // }
 
     template <typename type>
     void binary_tree<type>::insert(type _dataitem) {
         switch(m_insertion_type) {
-            case insertion_type_e::default_order: {
+            case traversal_e::default_order: {
                 default_insert(_dataitem);
             } break;
 
-            case insertion_type_e::inorder: {
+            case traversal_e::inorder: {
                 std::cout << "inorder to be implemented\n";
             } break;
-            case insertion_type_e::preorder: {
+            case traversal_e::preorder: {
                 std::cout << "preorder to be implemented\n";
-
             } break;
-            case insertion_type_e::postorder: {
+            case traversal_e::postorder: {
                 std::cout << "postorder to be implemented\n";
 
             } break;
@@ -101,14 +181,14 @@ namespace ycontainer {
     template <typename type>
     void binary_tree<type>::default_insert(type _dataitem) {
         if(m_root == nullptr) {
-            node *tmp = malloc_node();
+            node *tmp = new node();
             tmp->data = _dataitem;
             tmp->left_node = nullptr;
             tmp->right_node = nullptr;
             m_root = tmp;
             tmp = nullptr;
         } else {
-            node *tmp = malloc_node();
+            node *tmp = new node();
             tmp->data = _dataitem;
             tmp->left_node = nullptr;
             tmp->right_node = nullptr;
@@ -158,7 +238,7 @@ namespace ycontainer {
     }
 
     template <typename type>
-    void binary_tree<type>::delete_node(type _dataitem) {
+    void binary_tree<type>::erase(type _dataitem) {
         if(m_root != nullptr) {
             node* parent_node_ptr = nullptr;
             node* node_ptr = m_root;
@@ -174,7 +254,7 @@ namespace ycontainer {
                     if(isnull_macro(node_ptr->left_node) && isnull_macro(node_ptr->right_node)) {
                         std::cout << "first case\n";
                         if(isnull_macro(parent_node_ptr)) {
-                            free_node(node_ptr);
+                            delete (node_ptr);
                             break;
                         } else {
                             if(parent_node_ptr->right_node == node_ptr) {
@@ -182,7 +262,7 @@ namespace ycontainer {
                             } else {
                                 parent_node_ptr->left_node = nullptr;
                             }
-                            free_node(node_ptr);
+                            delete (node_ptr);
                             break;
                         }
                     } else if(notnull_macro(node_ptr->left_node) ^ notnull_macro(node_ptr->right_node)) {
@@ -191,7 +271,7 @@ namespace ycontainer {
                             if(notnull_macro(node_ptr->left_node)) {
                                 m_root = node_ptr->left_node;
                             } else m_root = node_ptr->right_node;
-                            free_node(node_ptr);
+                            delete (node_ptr);
                             break;
                         } else {
                             if(notnull_macro(node_ptr->left_node)) {
@@ -203,7 +283,7 @@ namespace ycontainer {
                                     parent_node_ptr->left_node = node_ptr->right_node;
                                 } else parent_node_ptr->right_node = node_ptr->right_node;
                             }
-                            free_node(node_ptr);
+                            delete (node_ptr);
                             break;
                         }
                     } else if(notnull_macro(node_ptr->left_node) && notnull_macro(node_ptr->right_node)) {
@@ -215,7 +295,7 @@ namespace ycontainer {
                                 tmp_node_ptr = tmp_node_ptr->right_node;
                             }
                             tmp_node_ptr->right_node = node_ptr->right_node;
-                            free_node(node_ptr);
+                            delete (node_ptr);
                             break;
                         } else {
                             node* tmp_node_ptr = nullptr;
@@ -230,7 +310,7 @@ namespace ycontainer {
                                 tmp_node_ptr = tmp_node_ptr->right_node;
                             }
                             tmp_node_ptr->right_node = node_ptr->right_node;
-                            free_node(node_ptr);
+                            delete (node_ptr);
                             break;
                         }
                     }
@@ -249,12 +329,16 @@ namespace ycontainer {
         }
     }
 
-    template <typename type>
-    binary_tree<type>::~binary_tree() {
-        std::cout << "node count: " << m_addressbook.length() << "\n";
-        for(size_t i{}; i < m_addressbook.length(); i++) {
-            delete m_addressbook.at(i);
-        }
-        std::cout << "destruction done\n";
-    }
+    // template <typename type>
+    // binary_tree<type>::~binary_tree() {
+    //     std::cout << "node count: " << m_addressbook.length() << "\n";
+    //     for(size_t i{1}; i < m_addressbook.length(); i++) {
+    //         // delete m_addressbook.at(i);
+    //         // std::cout << m_addressbook.at(i)->data << std::endl;
+    //     }
+    //     std::cout << "destruction done\n";
+    // }
+
+
+
 } // namespace ycontainer

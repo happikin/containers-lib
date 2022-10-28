@@ -4,7 +4,7 @@
 int main(int argc, char const *argv[]) {
 
     ycontainer::binary_tree<int> b(
-        ycontainer::insertion_type_e::default_order);
+        ycontainer::traversal_e::default_order);
     
     b.insert(100);
     b.insert(150);
@@ -30,7 +30,19 @@ int main(int argc, char const *argv[]) {
         std::cout << "found\n";
     }
 
-    // b.delete_node(100);
+    // b.erase(100);
 
+    std::cout << "inorder\n";
+    ycontainer::util::print(b,ycontainer::traversal_e::inorder);
+
+    // std::cout << "preorder\n";
+    // ycontainer::util::print(b,ycontainer::traversal_e::preorder);
+
+    // std::cout << "postorder\n";
+    // ycontainer::util::print(b,ycontainer::traversal_e::postorder);
+
+    ycontainer::util::mirror(b);
+    std::cout << "inorder after mirror\n";
+    ycontainer::util::print(b,ycontainer::traversal_e::inorder);
     return 0;
 }
