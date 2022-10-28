@@ -328,7 +328,7 @@ namespace ycontainer {
 
     template <typename type>
     uint list<type>::count(std::function<bool(type& dataItem)>&& predicate) {
-        std::cout << "using std::functional\n";
+        // std::cout << "using std::functional\n";
         uint count{0};
         for(type& item:*this) {
             (predicate(item) ? count++ : count=count);
@@ -337,7 +337,7 @@ namespace ycontainer {
 
     template <typename type>
     uint list<type>::count(bool(*predicate)(type& dataItem)) {
-        std::cout << "using function pointer\n";
+        // std::cout << "using function pointer\n";
         return this->count(std::function<bool(type& dataItem)>(predicate));
     }
 

@@ -1,3 +1,8 @@
+## How to build
+  - `cd <cloned-directory>`
+  - `mkdir build`
+  - `make -j$(nproc)`
+
 # containers-lib
 Modern C++ implementation of widely used containers
 ## List<T>
