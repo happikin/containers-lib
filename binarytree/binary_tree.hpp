@@ -7,6 +7,7 @@
     #include <iostream>
 #endif
 #include <list.hpp>
+#include <stack>
 
 #define isnull_macro(item) (item == nullptr)
 #define notnull_macro(item) (item != nullptr)
@@ -53,37 +54,109 @@ namespace ycontainer {
             */
             switch(_traversal) {
                 case traversal_e::inorder: {
-                    std::function<void(const struct ycontainer::binary_tree<type>::node*)> local_print
-                        = [&](const struct ycontainer::binary_tree<type>::node* _node){
-                        if(isnull_macro(_node)) return;
-                        local_print(_node->left_node);
-                        std::cout << _node->data << "\n";
-                        local_print(_node->right_node);
-                    };
 
-                    local_print(_in.m_root);
+                    // recursive method:- 
+                    // std::function<void(const struct ycontainer::binary_tree<type>::node*)> local_print
+                    //     = [&](const struct ycontainer::binary_tree<type>::node* _node){
+                    //     if(isnull_macro(_node)) return;
+                    //     local_print(_node->left_node);
+                    //     std::cout << _node->data << "\n";
+                    //     local_print(_node->right_node);
+                    // };
+                    // local_print(_in.m_root);
+                    
+                    std::string output_var = "inorder       [";
+                    std::stack<struct ycontainer::binary_tree<type>::node*> local_stack;
+                    struct ycontainer::binary_tree<type>::node
+                        *node_ptr = _in.m_root,
+                        *visited_node_ptr = _in.m_root;
+
+                    if(notnull_macro(node_ptr)) {
+                        while(notnull_macro(node_ptr)) {
+                            while(notnull_macro(node_ptr->left_node)) {
+                                if(notnull_macro(node_ptr->right_node))
+                                    local_stack.push(node_ptr->right_node);
+                                local_stack.push(node_ptr);
+                                node_ptr = node_ptr->left_node;
+                            }
+                            while(isnull_macro(node_ptr->right_node) && !local_stack.empty()) {
+                                // std::cout << node_ptr->data << " \n";
+                                output_var += " " + std::to_string(node_ptr->data);
+                                node_ptr = local_stack.top();
+                                local_stack.pop();
+                            }
+                            // std::cout << node_ptr->data << " \n";
+                            output_var += " " + std::to_string(node_ptr->data);
+                            if(!local_stack.empty()) {
+                                node_ptr = local_stack.top();
+                                local_stack.pop();
+                            } else node_ptr = nullptr;
+                        }
+                        std::cout << output_var << " ]\n";
+                    } else std::runtime_error("attempt to print a null-tree");
+
                 } break;
                 case traversal_e::preorder: {
-                    std::function<void(const struct ycontainer::binary_tree<type>::node*)> local_print
-                        = [&](const struct ycontainer::binary_tree<type>::node* _node){
-                        if(isnull_macro(_node)) return;
-                        std::cout << _node->data << "\n";
-                        local_print(_node->left_node);
-                        local_print(_node->right_node);
-                    };
+                        
+                        std::string output_var = "preorder      [";
+                        std::stack<struct ycontainer::binary_tree<type>::node*> local_stack;
+                        struct ycontainer::binary_tree<type>::node* node_ptr = _in.m_root;
+                        
+                        if(notnull_macro(node_ptr)) {
+                            local_stack.push(node_ptr);
+                            while(!local_stack.empty()) {
+                                node_ptr = local_stack.top();
+                                local_stack.pop();
+                                output_var += " " + std::to_string(node_ptr->data);
+                                if(notnull_macro(node_ptr->right_node))
+                                    local_stack.push(node_ptr->right_node);
+                                if(notnull_macro(node_ptr->left_node))
+                                    local_stack.push(node_ptr->left_node);
+                            }
+                            std::cout << output_var << " ]\n";
+                        }
 
-                    local_print(_in.m_root);
                 } break;
                 case traversal_e::postorder: {
-                    std::function<void(const struct ycontainer::binary_tree<type>::node*)> local_print
-                        = [&](const struct ycontainer::binary_tree<type>::node* _node){
-                        if(isnull_macro(_node)) return;
-                        local_print(_node->left_node);
-                        local_print(_node->right_node);
-                        std::cout << _node->data << "\n";
-                    };
+                    
+                    // recursive method:- 
+                    // std::function<void(const struct ycontainer::binary_tree<type>::node*)> local_print
+                    //     = [&](const struct ycontainer::binary_tree<type>::node* _node){
+                    //     if(isnull_macro(_node)) return;
+                    //     local_print(_node->left_node);
+                    //     local_print(_node->right_node);
+                    //     std::cout << _node->data << "\n";
+                    // };
+                    // local_print(_in.m_root);
 
-                    local_print(_in.m_root);
+                    std::stack<struct ycontainer::binary_tree<type>::node*> local_stack;
+                    struct ycontainer::binary_tree<type>::node 
+                        *node_ptr = _in.m_root,
+                        *visited_node = _in.m_root;
+
+                    if(notnull_macro(node_ptr)) {
+                        std::string output = "postorder     [";
+                        while(notnull_macro(node_ptr)) {
+                            while(notnull_macro(node_ptr->left_node)) {
+                                local_stack.push(node_ptr);
+                                node_ptr = node_ptr->left_node;
+                            }
+                            while(isnull_macro(node_ptr->right_node) || node_ptr->right_node == visited_node) {
+                                // std::cout << node_ptr->data << " ";
+                                output += " " + std::to_string(node_ptr->data);
+                                visited_node = node_ptr;
+                                if (local_stack.empty()) {
+                                    std::cout << output << " ]\n";
+                                    return;
+                                } node_ptr = local_stack.top();
+                                local_stack.pop();
+                            }
+                            local_stack.push(node_ptr);
+                            node_ptr = node_ptr->right_node;
+                        }
+                    } else std::runtime_error("attempt to print a null-tree");
+
+
                 } break;
                 default: {
                     throw std::invalid_argument("only inorder, preorder or postorder allowed");
